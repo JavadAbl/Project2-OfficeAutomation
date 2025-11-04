@@ -1,22 +1,13 @@
 import { User } from 'src/identity/entity/user.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Template } from './template.entity';
 import { Recipient } from 'src/letter/entity/recipient.entity';
 import { Attachment } from './attachment.entity';
 import { Approval } from 'src/workflow/entity/approval.entity';
+import { BaseEntity } from 'src/common/entity/base.entity';
 
-@Entity({ synchronize: false })
-export class Letter {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+@Entity({ synchronize: true })
+export class Letter extends BaseEntity {
   @Column()
   subject: string;
 
@@ -31,9 +22,6 @@ export class Letter {
 
   @Column()
   priority: string;
-
-  @Column({ type: 'datetime' })
-  created_at: Date;
 
   @ManyToOne(() => User, (user) => user.createdLetters)
   creatorUser: User;

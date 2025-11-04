@@ -1,16 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { Letter } from './letter.entity';
+import { BaseEntity } from 'src/common/entity/base.entity';
 
 @Entity()
-export class Attachment {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class Attachment extends BaseEntity {
+  @Column()
+  fileName: string;
 
   @Column()
-  file_name: string;
-
-  @Column()
-  file_path: string;
+  filePath: string;
 
   @ManyToOne(() => Letter, (en) => en.attachments)
   letter: Letter;

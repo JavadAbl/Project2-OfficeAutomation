@@ -1,30 +1,19 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, ManyToMany, ManyToOne } from 'typeorm';
 import { ApprovalWorkflow } from './approval-workflow.entity';
-import { User } from 'src/identity/entity/user.entity';
 import { Letter } from 'src/letter/entity/letter.entity';
+import { BaseEntity } from 'src/common/entity/base.entity';
 
 @Entity()
-export class Approval {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Approval extends BaseEntity {
   @Column()
-  status: string;
+  status: number;
 
   @Column('text', { nullable: true })
-  comments: string;
+  comment: string;
 
-  //  @ManyToOne(() => Letter, (Letter) => Letter.approvals)
+  @ManyToOne(() => Letter, (Letter) => Letter.approvals)
   letter: Letter;
 
   @ManyToMany(() => ApprovalWorkflow, (en) => en.approvals)
-  @JoinTable()
   workflow: ApprovalWorkflow;
 }

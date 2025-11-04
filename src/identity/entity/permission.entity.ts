@@ -1,15 +1,13 @@
 // Permission.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Entity, Column, ManyToMany } from 'typeorm';
 import { UserRole } from './user-roles';
 import { User } from './user.entity';
+import { BaseEntity } from 'src/common/entity/base.entity';
 
-@Entity()
-export class Permission {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+@Entity({ synchronize: true })
+export class Permission extends BaseEntity {
   @Column()
-  permission: string;
+  name: string;
 
   @ManyToMany(() => UserRole, (en) => en.permissions)
   roles: UserRole[];

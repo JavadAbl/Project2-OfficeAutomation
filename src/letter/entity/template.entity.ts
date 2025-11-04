@@ -1,16 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { Letter } from './letter.entity';
+import { BaseEntity } from 'src/common/entity/base.entity';
 
 @Entity()
-export class Template {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class Template extends BaseEntity {
+  @Column()
+  templateName: string;
 
   @Column()
-  template_name: string;
-
-  @Column()
-  subject_template: string;
+  subjectTemplate: string;
 
   @Column('text')
   body_template: string;

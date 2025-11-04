@@ -1,15 +1,13 @@
 // Recipient.ts
+import { BaseEntity } from 'src/common/entity/base.entity';
 import { User } from 'src/identity/entity/user.entity';
 import { Letter } from 'src/letter/entity/letter.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 
 @Entity()
-export class Recipient {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Recipient extends BaseEntity {
   @Column()
-  recipient_address: string;
+  recipientAddress: string;
 
   @ManyToOne(() => Letter, (en) => en.recipients)
   letter: Letter;

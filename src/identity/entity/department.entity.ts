@@ -1,27 +1,12 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { ApprovalWorkflowRole } from 'src/workflow/entity/approval-workflow-role.entity';
+import { BaseEntity } from 'src/common/entity/base.entity';
 
 @Entity({ synchronize: true })
-export class Department {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Department extends BaseEntity {
   @Column()
   name: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @OneToMany(() => User, (en) => en.department)
   users: User[];

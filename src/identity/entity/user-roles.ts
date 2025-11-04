@@ -1,29 +1,13 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { ApprovalWorkflowRole } from 'src/workflow/entity/approval-workflow-role.entity';
 import { Permission } from './permission.entity';
+import { BaseEntity } from 'src/common/entity/base.entity';
 
 @Entity({ synchronize: true })
-export class UserRole {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class UserRole extends BaseEntity {
   @Column({ unique: true, nullable: false })
-  role: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-  @UpdateDateColumn()
-  updatedAt: Date;
+  name: string;
 
   @ManyToMany(() => Permission, (permission) => permission.roles)
   @JoinTable({
