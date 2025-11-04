@@ -10,5 +10,5 @@ export class UserCreateRequest {
   password: string;
 
   @IsString()
-  organization_id: string;
+  departmentId: number;
 }

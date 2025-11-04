@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SeedService } from './seed.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Organization } from 'src/auth/entity/organization.entity';
-import { UserRoles } from 'src/auth/entity/user-roles';
-import { User } from 'src/auth/entity/user.entity';
+import { Department } from 'src/identity/entity/department.entity';
+import { UserRole } from 'src/identity/entity/user-roles';
+import { User } from 'src/identity/entity/user.entity';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { User } from 'src/auth/entity/user.entity';
         type: 'better-sqlite3',
         database: 'app.db',
         // autoLoadEntities: true,
-        entities: [Organization, UserRoles, User],
+        entities: [Department, UserRole, User],
         synchronize: true,
       }),
     }),

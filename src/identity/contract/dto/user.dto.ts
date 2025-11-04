@@ -1,10 +1,13 @@
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class OrganizationDto {
+export class UserDto {
   @Expose()
   id: string;
 
   @Expose()
-  name: string;
+  username: string;
+
+  @Expose()
+  departmentId: string;
 }
