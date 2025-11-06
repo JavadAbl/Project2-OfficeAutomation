@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entity/user.entity';
 import { Department } from './entity/department.entity';
 import { DepartmentDto } from './contract/dto/department.dto';
 import { DepartmentCreateRequest } from './contract/request/department-create.request';
@@ -14,9 +13,6 @@ import { plainToInstance } from 'class-transformer';
 @Injectable()
 export class DepartmentService {
   constructor(
-    @InjectRepository(User)
-    private readonly repUser: Repository<User>,
-
     @InjectRepository(Department)
     private readonly repDep: Repository<Department>,
   ) {}

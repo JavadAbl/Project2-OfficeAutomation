@@ -1,17 +1,21 @@
 import { Module } from '@nestjs/common';
-import { LetterController } from './letter.controller';
-import { LetterService } from './letter.service';
+import { LetterController } from './controller/letter.controller';
+import { LetterService } from './service/letter.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Letter } from './entity/letter.entity';
 import { Attachment } from './entity/attachment.entity';
 import { Recipient } from './entity/recipient.entity';
 import { Template } from './entity/template.entity';
+import { AttachmentController } from './controller/attachment.controller';
+import { AttachmentService } from './service/attachment.service';
+import { TemplateService } from './service/template.service';
+import { TemplateController } from './controller/template.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Letter, Attachment, Recipient, Template]),
   ],
-  controllers: [LetterController],
-  providers: [LetterService],
+  controllers: [LetterController, AttachmentController, TemplateController],
+  providers: [LetterService, AttachmentService, TemplateService],
 })
 export class LetterModule {}

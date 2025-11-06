@@ -13,6 +13,7 @@ yarn-error.log*
 lerna-debug.log*
 *.db
 package-lock.json
+public
 # OS
 .DS_Store
 

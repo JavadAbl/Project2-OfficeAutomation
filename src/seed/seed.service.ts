@@ -31,7 +31,7 @@ export class SeedService {
 
   async seedRoles() {
     if ((await this.em.count(UserRole)) !== 0) return;
-    const roles = [{ role: 'admin' }, { role: 'operator' }, { role: 'reader' }];
+    const roles = [{ name: 'admin' }, { name: 'operator' }, { name: 'reader' }];
     const rolesEntities = this.em.create(UserRole, roles);
     await this.em.save(rolesEntities);
   }
@@ -53,7 +53,7 @@ export class SeedService {
 
       // Random role
       const roleName = roleNames[randomInt(roleNames.length)];
-      const role = await this.em.findOneBy(UserRole, { role: roleName });
+      const role = await this.em.findOneBy(UserRole, { name: roleName });
       if (!role) continue; // safety
 
       const user = new User();

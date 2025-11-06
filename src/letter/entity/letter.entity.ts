@@ -5,25 +5,23 @@ import { Recipient } from 'src/letter/entity/recipient.entity';
 import { Attachment } from './attachment.entity';
 import { Approval } from 'src/workflow/entity/approval.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
+import { LetterStatus } from '../contract/enum/letter-status.enum';
 
 @Entity({ synchronize: true })
 export class Letter extends BaseEntity {
   @Column()
   subject: string;
 
-  @Column('text')
+  @Column()
   body: string;
 
-  @Column()
-  type: string;
-
-  @Column()
-  status: string;
+  @Column({ default: LetterStatus.draft, enum: LetterStatus })
+  status: LetterStatus;
 
   @Column()
   priority: string;
 
-  @ManyToOne(() => User, (user) => user.createdLetters)
+  @ManyToOne(() => User, (user) => user.createdLetters, { nullable: true })
   creatorUser: User;
 
   @ManyToOne(() => Template, (template) => template.letters)
