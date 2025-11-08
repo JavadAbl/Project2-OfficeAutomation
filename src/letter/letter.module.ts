@@ -10,10 +10,12 @@ import { AttachmentController } from './controller/attachment.controller';
 import { AttachmentService } from './service/attachment.service';
 import { TemplateService } from './service/template.service';
 import { TemplateController } from './controller/template.controller';
+import { E1 } from './entity/e1.entity';
+import { E2 } from './entity/e2.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Letter, Attachment, Recipient, Template]),
+    TypeOrmModule.forFeature([Letter, Attachment, Recipient, Template, E1, E2]),
   ],
   controllers: [LetterController, AttachmentController, TemplateController],
   providers: [LetterService, AttachmentService, TemplateService],
