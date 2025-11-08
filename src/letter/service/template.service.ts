@@ -12,6 +12,8 @@ import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { E1 } from '../entity/e1.entity';
 import { E2 } from '../entity/e2.entity';
+import { TemplateDto } from '../contract/dto/TemplateDto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class TemplateService {
@@ -25,16 +27,10 @@ export class TemplateService {
     @InjectEntityManager() private em: EntityManager,
   ) {}
 
-  async createTemplate(
+  async create(
     payload: TemplateCreateRequest,
     file: Express.Multer.File,
-  ) {
-    const e1 = this.em.create(E1, { name: 'E1', e2: { name: 'e2' } });
-    await this.em.save(E1, e1);
-    //  const e1: any = await this.em.findOneBy(E1, { id: 1 });
-    // const e1 = await this.em.delete(E1, 1);
-
-    return;
+  ): Promise<number> {
     if (!file) throw new BadRequestException('Invalid file');
 
     const existingTemplate = await this.rep.findOneBy({ name: payload.name });
@@ -51,5 +47,10 @@ export class TemplateService {
     await writeFile(filePath, file.buffer);
 
     return templateEntity.id;
+  }
+
+  async getAll(): Promise<TemplateDto[]> {
+    const templates = await this.rep.find();
+    return templates.map((template) => plainToInstance(TemplateDto, template));
   }
 }

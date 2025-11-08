@@ -5,10 +5,12 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Get,
 } from '@nestjs/common';
 import { TemplateCreateRequest } from '../contract/request/template-create.request';
 import { TemplateService } from '../service/template.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { TemplateDto } from '../contract/dto/TemplateDto';
 
 @Controller('letter/template')
 export class TemplateController {
@@ -30,10 +32,15 @@ export class TemplateController {
     }),
   )
   @Post()
-  createTemplate(
+  createTemplateEndpoint(
     @Body() payload: TemplateCreateRequest,
     @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.service.createTemplate(payload, file);
+  ): Promise<number> {
+    return this.service.create(payload, file);
+  }
+
+  @Get()
+  getTemplatesEndpoint(): Promise<TemplateDto[]> {
+    return this.service.getAll();
   }
 }
