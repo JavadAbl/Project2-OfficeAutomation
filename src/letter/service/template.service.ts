@@ -12,7 +12,7 @@ import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { E1 } from '../entity/e1.entity';
 import { E2 } from '../entity/e2.entity';
-import { TemplateDto } from '../contract/dto/TemplateDto';
+import { TemplateDto } from '../contract/dto/template.dto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()

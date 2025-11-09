@@ -10,7 +10,7 @@ import {
 import { TemplateCreateRequest } from '../contract/request/template-create.request';
 import { TemplateService } from '../service/template.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { TemplateDto } from '../contract/dto/TemplateDto';
+import { TemplateDto } from '../contract/dto/template.dto';
 
 @Controller('letter/template')
 export class TemplateController {

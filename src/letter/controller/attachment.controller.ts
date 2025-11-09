@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Post,
@@ -10,7 +9,7 @@ import { AttachmentService } from '../service/attachment.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AttachmentCreateRequest } from '../contract/request/attachment-create.request';
 
-@Controller('attachment')
+@Controller('letter/attachment')
 export class AttachmentController {
   constructor(private readonly service: AttachmentService) {}
 
@@ -23,7 +22,7 @@ export class AttachmentController {
   createAttachmentEndpoint(
     @Body() payload: AttachmentCreateRequest,
     @UploadedFiles() files: Express.Multer.File[],
-  ): Promise<number> {
+  ): Promise<void> {
     return this.service.create(payload, files);
   }
 }

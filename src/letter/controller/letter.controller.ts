@@ -1,14 +1,20 @@
-import { Controller } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Letter } from '../entity/letter.entity';
-import { Repository } from 'typeorm';
-import { LetterCreateRequest } from '../contract/request/letter-create.request';
+import { Body, Controller, Post, Put } from '@nestjs/common';
+import { LetterService } from '../service/letter.service';
+import { LetterSetPriorityRequest } from '../contract/request/letter-set-priority.request';
 
 @Controller('letter')
 export class LetterController {
-  constructor(
-    @InjectRepository(Letter) private readonly repLetter: Repository<Letter>,
-  ) {}
+  constructor(private readonly service: LetterService) {}
 
-  async createLetter(payload: LetterCreateRequest) {}
+  @Post()
+  createLetterEndpoint() {
+    return this.service.create();
+  }
+
+  @Put()
+  setLetterPriorityEndpoint(
+    @Body() payload: LetterSetPriorityRequest,
+  ): Promise<void> {
+    return this.service.setPriority(payload);
+  }
 }

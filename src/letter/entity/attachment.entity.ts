@@ -7,9 +7,6 @@ export class Attachment extends BaseEntity {
   @Column()
   fileName: string;
 
-  @Column()
-  filePath: string;
-
   @ManyToOne(() => Letter, (en) => en.attachments)
   letter: Letter;
 }
