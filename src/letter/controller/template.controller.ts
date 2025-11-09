@@ -41,6 +41,6 @@ export class TemplateController {
 
   @Get()
   getTemplatesEndpoint(): Promise<TemplateDto[]> {
-    return this.service.getAll();
+    return this.service.getDto();
   }
 }

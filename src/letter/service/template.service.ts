@@ -14,18 +14,21 @@ import { E1 } from '../entity/e1.entity';
 import { E2 } from '../entity/e2.entity';
 import { TemplateDto } from '../contract/dto/template.dto';
 import { plainToInstance } from 'class-transformer';
+import { BaseService } from 'src/common/service/base.service';
 
 @Injectable()
-export class TemplateService {
+export class TemplateService extends BaseService<Template> {
   constructor(
     @InjectRepository(Template)
-    private readonly rep: Repository<Template>,
+    rep: Repository<Template>,
 
     @InjectRepository(E1)
     private readonly repE1: Repository<E1>,
 
     @InjectEntityManager() private em: EntityManager,
-  ) {}
+  ) {
+    super(rep, 'Template');
+  }
 
   async create(
     payload: TemplateCreateRequest,
@@ -33,9 +36,7 @@ export class TemplateService {
   ): Promise<number> {
     if (!file) throw new BadRequestException('Invalid file');
 
-    const existingTemplate = await this.rep.findOneBy({ name: payload.name });
-    if (existingTemplate)
-      throw new ConflictException('Template is already exists');
+    await this.checkBy('name', payload.name);
 
     const fileName = randomUUID() + '.html';
     const template = this.rep.create({ ...payload, fileName });
@@ -49,7 +50,7 @@ export class TemplateService {
     return templateEntity.id;
   }
 
-  async getAll(): Promise<TemplateDto[]> {
+  async getDto(): Promise<TemplateDto[]> {
     const templates = await this.rep.find();
     return templates.map((template) => plainToInstance(TemplateDto, template));
   }

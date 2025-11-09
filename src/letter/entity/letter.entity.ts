@@ -10,7 +10,7 @@ import { LetterPriority } from '../contract/enum/letter-priority.enum';
 
 @Entity({ synchronize: true })
 export class Letter extends BaseEntity {
-  @Column()
+  @Column({ unique: true })
   number: string;
 
   @Column({ nullable: true })
