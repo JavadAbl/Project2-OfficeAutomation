@@ -60,7 +60,7 @@ export class SeedService {
       user.username = `user${i}`;
       user.department = organ;
       user.role = role;
-      user.passwordHash = await CryptoUtils.hashPassword('123');
+      user.password = await CryptoUtils.hashPassword('123');
 
       users.push(user);
     }

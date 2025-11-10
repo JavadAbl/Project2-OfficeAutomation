@@ -12,11 +12,11 @@ import { UserDto } from './contract/dto/user.dto';
 import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
 import { UserService } from './user.service';
 
-@Controller('user')
+@Controller('Identity/User')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('User')
+  @Post()
   createUserEndpoint(@Body() payload: UserCreateRequest): Promise<UserDto> {
     return this.userService.createUser(payload);
   }

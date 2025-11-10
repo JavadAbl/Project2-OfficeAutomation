@@ -13,5 +13,6 @@ import { Department } from './entity/department.entity';
   imports: [TypeOrmModule.forFeature([User, UserRole, Permission, Department])],
   controllers: [UserController, DepartmentController],
   providers: [DepartmentService, UserService],
+  exports: [UserService],
 })
 export class IdentityModule {}

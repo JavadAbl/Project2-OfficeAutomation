@@ -15,6 +15,10 @@ import { BaseService } from 'src/common/service/base.service';
 import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { Attachment } from '../entity/attachment.entity';
+import { LetterCreateRecipientRequest } from '../contract/request/letter-create-recipient.request';
+import { UserService } from 'src/identity/user.service';
+import { Recipient } from '../entity/recipient.entity';
+import { LetterRecipientDto } from '../contract/dto/letter-recipient.dto';
 
 @Injectable()
 export class LetterService extends BaseService<Letter> {
@@ -27,7 +31,11 @@ export class LetterService extends BaseService<Letter> {
     @InjectRepository(Attachment)
     private readonly repAttachment: Repository<Attachment>,
 
+    @InjectRepository(Recipient)
+    private readonly repRecipient: Repository<Recipient>,
+
     private readonly templateService: TemplateService,
+    private readonly userService: UserService,
   ) {
     super(rep, 'Letter');
   }
@@ -90,6 +98,25 @@ export class LetterService extends BaseService<Letter> {
     await this.checkById(id);
     await this.templateService.checkById(templateId);
     await this.rep.update({ id }, { templateId });
+  }
+
+  async createRecipient(
+    letterId: number,
+    payload: LetterCreateRecipientRequest,
+  ): Promise<LetterRecipientDto> {
+    //Todo a user cannot create recipient for itself
+    const { userId } = payload;
+    await this.checkById(letterId);
+    await this.userService.checkById(userId);
+
+    let recipient = this.repRecipient.create({
+      letterId,
+      userId,
+    });
+
+    recipient = await this.repRecipient.save(recipient);
+
+    return { id: recipient.id, letterId, userId };
   }
 
   getById(id: number) {

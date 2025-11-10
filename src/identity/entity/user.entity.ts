@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -13,18 +14,19 @@ import { Recipient } from 'src/letter/entity/recipient.entity';
 import { Permission } from './permission.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 
-@Entity({ synchronize: true })
+@Entity()
 export class User extends BaseEntity {
   @Column({ unique: true, nullable: false })
   username: string;
 
   @Column()
-  passwordHash: string;
+  password: string;
 
-  @ManyToOne(() => Department, (entity) => entity.users, {
-    nullable: false,
-  })
+  @ManyToOne(() => Department, (entity) => entity.users, { nullable: true })
+  @JoinColumn({ name: 'departmentId' })
   department: Department;
+  @Column({ nullable: true })
+  departmentId: number;
 
   @ManyToOne(() => UserRole, (entity) => entity.users)
   role: UserRole;
