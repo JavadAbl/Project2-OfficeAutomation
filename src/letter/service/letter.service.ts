@@ -2,7 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Letter } from '../entity/letter.entity';
 import { Repository } from 'typeorm';
-import { generateLetterNumber } from 'src/common/utils/app.utils';
+import {
+  generateLetterNumber,
+  getFileNameAndExt,
+} from 'src/common/utils/app.utils';
 import { plainToInstance } from 'class-transformer';
 import { letterDto } from '../contract/dto/letter.dto';
 import { LetterSetPriorityRequest } from '../contract/request/letter-set-priority.request';
@@ -37,16 +40,16 @@ export class LetterService extends BaseService<Letter> {
     return plainToInstance(letterDto, newLetter);
   }
 
-  async setPriority(payload: LetterSetPriorityRequest) {
-    const letter = await this.getAndCheckById(payload.id);
-    letter.priority = payload.priority;
-    await this.rep.save(letter);
+  async setPriority(id: number, payload: LetterSetPriorityRequest) {
+    const { priority } = payload;
+    await this.checkById(id);
+    await this.rep.update({ id }, { priority });
   }
 
   async setRecipient() {}
 
   async addAttachments(id: number, files: Express.Multer.File[]) {
-    const letter = await this.getAndCheckById(id);
+    await this.getAndCheckById(id);
     if (!files || !files.length) throw new BadRequestException('Invalid files');
 
     const publicDir = join(process.cwd(), 'public', 'attachments');
@@ -54,13 +57,14 @@ export class LetterService extends BaseService<Letter> {
 
     const attachments = await Promise.all(
       files.map(async (file) => {
-        const fileName = `${file.originalname}-${letter.id}`;
+        const [name, ext] = getFileNameAndExt(file.originalname);
+        const fileName = `${name}-${id}.${ext}`;
         const filePath = join(publicDir, fileName);
 
         await writeFile(filePath, file.buffer);
 
         const attachment = this.repAttachment.create({
-          letter,
+          letterId: id,
           fileName,
         });
 
@@ -78,13 +82,14 @@ export class LetterService extends BaseService<Letter> {
     await this.repAttachment.save(attachments);
   }
 
-  async setTemplate(payload: LetterSetTemplateRequest): Promise<void> {
-    const { id, templateId } = payload;
-    const letter = await this.getAndCheckById(id);
-    const template = await this.templateService.getAndCheckById(templateId);
-
-    letter.template = template;
-    await this.rep.save(letter);
+  async setTemplate(
+    id: number,
+    payload: LetterSetTemplateRequest,
+  ): Promise<void> {
+    const { templateId } = payload;
+    await this.checkById(id);
+    await this.templateService.checkById(templateId);
+    await this.rep.update({ id }, { templateId });
   }
 
   getById(id: number) {

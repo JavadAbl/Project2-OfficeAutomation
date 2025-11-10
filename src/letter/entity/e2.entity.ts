@@ -9,6 +9,9 @@ export class E2 extends BaseEntity {
   name: string;
 
   @OneToOne(() => E1, (e1) => e1.e2)
-  @JoinColumn()
+  @JoinColumn({ name: 'e1Id' })
   e1: E1;
+
+  @Column({ nullable: true })
+  e1Id: number;
 }

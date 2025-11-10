@@ -6,9 +6,6 @@ import { Entity, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Recipient extends BaseEntity {
-  @Column()
-  recipientAddress: string;
-
   @ManyToOne(() => Letter, (en) => en.recipients)
   letter: Letter;
 

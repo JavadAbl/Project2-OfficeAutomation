@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Letter } from './letter.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 
@@ -7,6 +7,9 @@ export class Attachment extends BaseEntity {
   @Column()
   fileName: string;
 
-  @ManyToOne(() => Letter, (en) => en.attachments)
+  @ManyToOne(() => Letter, (en) => en.attachments, { nullable: false })
+  @JoinColumn({ name: 'letterId' })
   letter: Letter;
+  @Column({ nullable: false })
+  letterId: number;
 }

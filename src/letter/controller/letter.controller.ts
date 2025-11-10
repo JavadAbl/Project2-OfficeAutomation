@@ -12,6 +12,7 @@ import { LetterService } from '../service/letter.service';
 import { LetterSetPriorityRequest } from '../contract/request/letter-set-priority.request';
 import { LetterSetTemplateRequest } from '../contract/request/letter-set-template.request';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { LetterCreateRecipientRequest } from '../contract/request/letter-create-recipient.request';
 
 @Controller('letter')
 export class LetterController {
@@ -22,18 +23,20 @@ export class LetterController {
     return this.service.create();
   }
 
-  @Patch('SetPriority')
+  @Patch('SetPriority/:id')
   setLetterPriorityEndpoint(
+    @Param('id', ParseIntPipe) id: number,
     @Body() payload: LetterSetPriorityRequest,
   ): Promise<void> {
-    return this.service.setPriority(payload);
+    return this.service.setPriority(id, payload);
   }
 
-  @Patch('SetTemplate')
+  @Patch('SetTemplate/:id')
   setLetterTemplateEndpoint(
+    @Param('id', ParseIntPipe) id: number,
     @Body() payload: LetterSetTemplateRequest,
   ): Promise<void> {
-    return this.service.setTemplate(payload);
+    return this.service.setTemplate(id, payload);
   }
 
   @UseInterceptors(
@@ -41,11 +44,17 @@ export class LetterController {
       limits: { fileSize: 1024 * 1024 * 10, files: 10 },
     }),
   )
-  @Post('AddAttachment/:id')
-  setLetterAttachmentEndpoint(
+  @Post('CreateAttachment/:id')
+  createAttachmentEndpoint(
     @Param('id', ParseIntPipe) id: number,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<void> {
     return this.service.addAttachments(id, files);
   }
+
+  @Post('CreateRecipient/:id')
+  createLetterRecipientEndpoint(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: LetterCreateRecipientRequest,
+  ) {}
 }

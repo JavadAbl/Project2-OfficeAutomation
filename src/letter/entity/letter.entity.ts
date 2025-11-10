@@ -1,5 +1,5 @@
 import { User } from 'src/identity/entity/user.entity';
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Template } from './template.entity';
 import { Recipient } from 'src/letter/entity/recipient.entity';
 import { Attachment } from './attachment.entity';
@@ -29,7 +29,10 @@ export class Letter extends BaseEntity {
   creatorUser: User;
 
   @ManyToOne(() => Template, (template) => template.letters)
+  @JoinColumn({ name: 'templateId' })
   template: Template;
+  @Column({ nullable: true })
+  templateId: number;
 
   @OneToMany(() => Recipient, (recipient) => recipient.letter)
   recipients: Recipient[];

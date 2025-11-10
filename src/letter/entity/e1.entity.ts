@@ -8,6 +8,6 @@ export class E1 extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToOne(() => E2, (e2) => e2.e1, { cascade: true })
+  @OneToOne(() => E2, (e2) => e2.e1)
   e2: E2;
 }
