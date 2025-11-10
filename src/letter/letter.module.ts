@@ -6,8 +6,6 @@ import { Letter } from './entity/letter.entity';
 import { Attachment } from './entity/attachment.entity';
 import { Recipient } from './entity/recipient.entity';
 import { Template } from './entity/template.entity';
-import { AttachmentController } from './controller/attachment.controller';
-import { AttachmentService } from './service/attachment.service';
 import { TemplateService } from './service/template.service';
 import { TemplateController } from './controller/template.controller';
 import { E1 } from './entity/e1.entity';
@@ -17,7 +15,7 @@ import { E2 } from './entity/e2.entity';
   imports: [
     TypeOrmModule.forFeature([Letter, Attachment, Recipient, Template, E1, E2]),
   ],
-  controllers: [LetterController, AttachmentController, TemplateController],
-  providers: [LetterService, AttachmentService, TemplateService],
+  controllers: [LetterController, TemplateController],
+  providers: [LetterService, TemplateService],
 })
 export class LetterModule {}

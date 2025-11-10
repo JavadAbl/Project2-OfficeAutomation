@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Letter } from '../entity/letter.entity';
 import { Repository } from 'typeorm';
@@ -9,6 +9,9 @@ import { LetterSetPriorityRequest } from '../contract/request/letter-set-priorit
 import { LetterSetTemplateRequest } from '../contract/request/letter-set-template.request';
 import { TemplateService } from './template.service';
 import { BaseService } from 'src/common/service/base.service';
+import { join } from 'path';
+import { mkdir, writeFile } from 'fs/promises';
+import { Attachment } from '../entity/attachment.entity';
 
 @Injectable()
 export class LetterService extends BaseService<Letter> {
@@ -17,6 +20,10 @@ export class LetterService extends BaseService<Letter> {
 
   constructor(
     @InjectRepository(Letter) rep: Repository<Letter>,
+
+    @InjectRepository(Attachment)
+    private readonly repAttachment: Repository<Attachment>,
+
     private readonly templateService: TemplateService,
   ) {
     super(rep, 'Letter');
@@ -37,6 +44,39 @@ export class LetterService extends BaseService<Letter> {
   }
 
   async setRecipient() {}
+
+  async addAttachments(id: number, files: Express.Multer.File[]) {
+    const letter = await this.getAndCheckById(id);
+    if (!files || !files.length) throw new BadRequestException('Invalid files');
+
+    const publicDir = join(process.cwd(), 'public', 'attachments');
+    await mkdir(publicDir, { recursive: true });
+
+    const attachments = await Promise.all(
+      files.map(async (file) => {
+        const fileName = `${file.originalname}-${letter.id}`;
+        const filePath = join(publicDir, fileName);
+
+        await writeFile(filePath, file.buffer);
+
+        const attachment = this.repAttachment.create({
+          letter,
+          fileName,
+        });
+
+        const existingAttachment = await this.repAttachment.findOneBy({
+          fileName,
+        });
+        if (existingAttachment) {
+          await this.repAttachment.delete(existingAttachment.id);
+        }
+
+        return attachment;
+      }),
+    );
+
+    await this.repAttachment.save(attachments);
+  }
 
   async setTemplate(payload: LetterSetTemplateRequest): Promise<void> {
     const { id, templateId } = payload;

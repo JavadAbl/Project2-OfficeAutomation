@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { Template } from '../entity/template.entity';
@@ -11,7 +7,6 @@ import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { E1 } from '../entity/e1.entity';
-import { E2 } from '../entity/e2.entity';
 import { TemplateDto } from '../contract/dto/template.dto';
 import { plainToInstance } from 'class-transformer';
 import { BaseService } from 'src/common/service/base.service';
