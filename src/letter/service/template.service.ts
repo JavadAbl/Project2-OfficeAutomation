@@ -46,7 +46,7 @@ export class TemplateService extends BaseService<Template> {
     return 1;*/
     if (!file) throw new BadRequestException('Invalid file');
 
-    await this.checkBy('name', payload.name);
+    await this.checkExistsBy('name', payload.name);
 
     const fileName = randomUUID() + '.html';
     const template = this.rep.create({ ...payload, fileName });

@@ -7,10 +7,10 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { UserCreateRequest } from './contract/request/user-create.request';
-import { UserDto } from './contract/dto/user.dto';
+import { UserCreateRequest } from '../contract/request/user-create.request';
+import { UserDto } from '../contract/dto/user.dto';
 import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
-import { UserService } from './user.service';
+import { UserService } from '../service/user.service';
 
 @Controller('Identity/User')
 export class UserController {

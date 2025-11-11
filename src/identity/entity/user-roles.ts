@@ -1,6 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { User } from './user.entity';
-import { ApprovalWorkflowRole } from 'src/workflow/entity/approval-workflow-role.entity';
 import { Permission } from './permission.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 
@@ -17,7 +16,4 @@ export class UserRole extends BaseEntity {
 
   @OneToMany(() => User, (user) => user.role)
   users: User[];
-
-  @OneToMany(() => ApprovalWorkflowRole, (en) => en.userRole)
-  approvalWorkflowRoles: ApprovalWorkflowRole[];
 }

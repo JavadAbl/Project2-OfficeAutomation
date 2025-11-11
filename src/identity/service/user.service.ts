@@ -3,13 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UserCreateRequest } from './contract/request/user-create.request';
-import { UserDto } from './contract/dto/user.dto';
+import { UserCreateRequest } from '../contract/request/user-create.request';
+import { UserDto } from '../contract/dto/user.dto';
 import { Repository } from 'typeorm';
-import { User } from './entity/user.entity';
+import { User } from '../entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CryptoUtils } from 'src/common/utils/crypto.utils';
-import { Department } from './entity/department.entity';
+import { Department } from '../entity/department.entity';
 import { plainToInstance } from 'class-transformer';
 import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
 import { TypeormUtils } from 'src/common/utils/typeorm.utils';
@@ -35,7 +35,7 @@ export class UserService extends BaseService<User> {
     if (exists) throw new ConflictException('Username already exists');
     const passwordHash = await CryptoUtils.hashPassword(password);
 
-    if (departmentId) await this.checkById(departmentId);
+    if (departmentId) await this.checkExistsById(departmentId);
 
     const user = this.rep.create({
       ...payload,

@@ -16,14 +16,14 @@ import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { Attachment } from '../entity/attachment.entity';
 import { LetterCreateRecipientRequest } from '../contract/request/letter-create-recipient.request';
-import { UserService } from 'src/identity/user.service';
+import { UserService } from 'src/identity/service/user.service';
 import { Recipient } from '../entity/recipient.entity';
 import { LetterRecipientDto } from '../contract/dto/letter-recipient.dto';
 
 @Injectable()
 export class LetterService extends BaseService<Letter> {
-  /*   getAndCheckById: typeof CommonService.getAndCheckById =
-    CommonService.getAndCheckById.bind(CommonService); */
+  /*   getAndcheckExistsById: typeof CommonService.getAndcheckExistsById =
+    CommonService.getAndcheckExistsById.bind(CommonService); */
 
   constructor(
     @InjectRepository(Letter) rep: Repository<Letter>,
@@ -50,14 +50,14 @@ export class LetterService extends BaseService<Letter> {
 
   async setPriority(id: number, payload: LetterSetPriorityRequest) {
     const { priority } = payload;
-    await this.checkById(id);
+    await this.checkExistsById(id);
     await this.rep.update({ id }, { priority });
   }
 
   async setRecipient() {}
 
   async addAttachments(id: number, files: Express.Multer.File[]) {
-    await this.getAndCheckById(id);
+    await this.getAndcheckExistsById(id);
     if (!files || !files.length) throw new BadRequestException('Invalid files');
 
     const publicDir = join(process.cwd(), 'public', 'attachments');
@@ -95,8 +95,8 @@ export class LetterService extends BaseService<Letter> {
     payload: LetterSetTemplateRequest,
   ): Promise<void> {
     const { templateId } = payload;
-    await this.checkById(id);
-    await this.templateService.checkById(templateId);
+    await this.checkExistsById(id);
+    await this.templateService.checkExistsById(templateId);
     await this.rep.update({ id }, { templateId });
   }
 
@@ -106,8 +106,8 @@ export class LetterService extends BaseService<Letter> {
   ): Promise<LetterRecipientDto> {
     //Todo a user cannot create recipient for itself
     const { userId } = payload;
-    await this.checkById(letterId);
-    await this.userService.checkById(userId);
+    await this.checkExistsById(letterId);
+    await this.userService.checkExistsById(userId);
 
     let recipient = this.repRecipient.create({
       letterId,

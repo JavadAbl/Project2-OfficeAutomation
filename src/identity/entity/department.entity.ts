@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { User } from './user.entity';
-import { ApprovalWorkflowRole } from 'src/workflow/entity/approval-workflow-role.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
+import { DepartmentRole } from './department-role';
 
-@Entity({ synchronize: true })
+@Entity()
 export class Department extends BaseEntity {
   @Column()
   name: string;
@@ -11,6 +11,6 @@ export class Department extends BaseEntity {
   @OneToMany(() => User, (en) => en.department)
   users: User[];
 
-  @OneToMany(() => ApprovalWorkflowRole, (en) => en.department)
-  approvalWorkflowRoles: ApprovalWorkflowRole[];
+  @OneToMany(() => DepartmentRole, (en) => en.department)
+  departmentRoles: DepartmentRole[];
 }
