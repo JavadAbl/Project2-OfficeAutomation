@@ -34,7 +34,7 @@ export class DepartmentController {
     return this.service.createDepartment(payload);
   }
 
-  @Post(':id/CreateRole')
+  @Post(':id/Role')
   createDepartmentRoleEndpoint(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: DepartmentRoleCreateRequest,

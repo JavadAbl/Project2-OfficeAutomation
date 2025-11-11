@@ -10,7 +10,6 @@ export class ApprovalWorkflow extends BaseEntity {
   name: string;
 
   @ManyToMany(() => Template, (en) => en.approvalWorkflows)
-  @JoinTable({ name: 'approval_workflow_templates' })
   templates: Template[];
 
   @ManyToMany(() => Approval, (approval) => approval.workflow)

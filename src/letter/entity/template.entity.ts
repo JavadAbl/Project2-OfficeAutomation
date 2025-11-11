@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Letter } from './letter.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 import { ApprovalWorkflow } from 'src/workflow/entity/approval-workflow.entity';
@@ -18,5 +18,6 @@ export class Template extends BaseEntity {
   letters: Letter[];
 
   @ManyToMany(() => ApprovalWorkflow, (en) => en.templates)
+  @JoinTable({ name: 'template_approval_workflows' })
   approvalWorkflows: ApprovalWorkflow[];
 }

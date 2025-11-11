@@ -13,7 +13,7 @@ export class BaseService<T extends AppEntity> {
 
   async getAndcheckExistsById(id: number): Promise<T> {
     const entity = await this.rep.findOneBy({ id } as FindOptionsWhere<T>);
-    this.throwNotFoundIfFalse(entity);
+    this.throwNotFoundIfFalse(entity, id);
     return entity!;
   }
 
@@ -21,13 +21,13 @@ export class BaseService<T extends AppEntity> {
     const entity = await this.rep.findOneBy({
       [field]: value,
     } as FindOptionsWhere<T>);
-    this.throwNotFoundIfFalse(entity);
+    this.throwNotFoundIfFalse(entity, value);
     return entity!;
   }
 
   async checkExistsById(id: number): Promise<boolean> {
     const result = await this.rep.existsBy({ id } as FindOptionsWhere<T>);
-    this.throwNotFoundIfFalse(result);
+    this.throwNotFoundIfFalse(result, id);
     return result;
   }
 
@@ -35,13 +35,13 @@ export class BaseService<T extends AppEntity> {
     const result = await this.rep.existsBy({
       [field]: value,
     } as FindOptionsWhere<T>);
-    this.throwNotFoundIfFalse(result);
+    this.throwNotFoundIfFalse(result, value);
     return result;
   }
 
   async checkConflictById(id: number): Promise<boolean> {
     const result = await this.rep.existsBy({ id } as FindOptionsWhere<T>);
-    this.throwNotConflictIfTrue(result);
+    this.throwNotConflictIfTrue(result, id);
     return result;
   }
 
@@ -49,15 +49,21 @@ export class BaseService<T extends AppEntity> {
     const result = await this.rep.existsBy({
       [field]: value,
     } as FindOptionsWhere<T>);
-    this.throwNotConflictIfTrue(result);
+    this.throwNotConflictIfTrue(result, value);
     return result;
   }
 
-  private throwNotFoundIfFalse(value: any) {
-    if (!value) throw new NotFoundException(`${this.entityName} is not found`);
+  private throwNotFoundIfFalse(value: any, fieldValue: any) {
+    if (!value)
+      throw new NotFoundException(
+        `${this.entityName} ${fieldValue} is not found`,
+      );
   }
 
-  private throwNotConflictIfTrue(value: any) {
-    if (value) throw new ConflictException(`${this.entityName} already exists`);
+  private throwNotConflictIfTrue(value: any, fieldValue: any) {
+    if (value)
+      throw new ConflictException(
+        `${this.entityName} ${fieldValue} already exists`,
+      );
   }
 }

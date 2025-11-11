@@ -14,6 +14,7 @@ export class ApprovalWorkflowRole extends BaseEntity {
   @ManyToMany(
     () => DepartmentRole,
     (departmentRoles) => departmentRoles.approvalWorkflowRoles,
+    { nullable: false },
   )
   @JoinTable({ name: 'approval-workflow-department-roles' })
   departmentRoles: DepartmentRole[];

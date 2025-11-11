@@ -42,8 +42,11 @@ export class DepartmentService extends BaseService<Department> {
     return plainToInstance(DepartmentDto, dep);
   }
 
-  async createDepartmentRole(id: number, payload: DepartmentRoleCreateRequest) {
+  async createDepartmentRole(
+    id: number,
+    payload: DepartmentRoleCreateRequest,
+  ): Promise<number> {
     await this.checkExistsById(id);
-    return this.departmentRoleService.createRole(id, payload);
+    return this.departmentRoleService.create(id, payload);
   }
 }

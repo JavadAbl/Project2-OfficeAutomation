@@ -14,11 +14,11 @@ export class DepartmentRoleService extends BaseService<DepartmentRole> {
     super(rep, 'Department Role');
   }
 
-  async createRole(id: number, payload: DepartmentRoleCreateRequest) {
+  async create(departmentId: number, payload: DepartmentRoleCreateRequest) {
     const { name } = payload;
     await this.checkConflictBy('name', name);
 
-    let role = this.rep.create(payload);
+    let role = this.rep.create({ ...payload, departmentId });
     role = await this.rep.save(role);
 
     return role.id;

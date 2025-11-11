@@ -23,6 +23,6 @@ import { DepartmentRoleService } from './service/department-role.service';
   ],
   controllers: [UserController, DepartmentController],
   providers: [DepartmentService, UserService, DepartmentRoleService],
-  exports: [UserService],
+  exports: [UserService, DepartmentRoleService],
 })
 export class IdentityModule {}
