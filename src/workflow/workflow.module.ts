@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { Approval } from './entity/approval.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApprovalWorkflow } from './entity/approval-workflow.entity';
 import { ApprovalWorkflowRole } from './entity/approval-workflow-role.entity';
@@ -9,11 +8,7 @@ import { IdentityModule } from 'src/identity/identity.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Approval,
-      ApprovalWorkflow,
-      ApprovalWorkflowRole,
-    ]),
+    TypeOrmModule.forFeature([ApprovalWorkflow, ApprovalWorkflowRole]),
 
     IdentityModule,
   ],

@@ -3,7 +3,7 @@ import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Template } from './template.entity';
 import { Recipient } from 'src/letter/entity/recipient.entity';
 import { Attachment } from './attachment.entity';
-import { Approval } from 'src/workflow/entity/approval.entity';
+import { LetterApproval } from 'src/letter/entity/letter-approval.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 import { LetterStatus } from '../contract/enum/letter-status.enum';
 import { LetterPriority } from '../contract/enum/letter-priority.enum';
@@ -40,6 +40,6 @@ export class Letter extends BaseEntity {
   @OneToMany(() => Attachment, (attachment) => attachment.letter)
   attachments: Attachment[];
 
-  @OneToMany(() => Approval, (approval) => approval.letter)
-  approvals: Approval[];
+  @OneToMany(() => LetterApproval, (approval) => approval.letter)
+  letterApprovals: LetterApproval[];
 }

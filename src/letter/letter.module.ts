@@ -11,10 +11,19 @@ import { TemplateController } from './controller/template.controller';
 import { E1 } from './entity/e1.entity';
 import { E2 } from './entity/e2.entity';
 import { IdentityModule } from 'src/identity/identity.module';
+import { LetterApproval } from './entity/letter-approval.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Letter, Attachment, Recipient, Template, E1, E2]),
+    TypeOrmModule.forFeature([
+      Letter,
+      LetterApproval,
+      Attachment,
+      Recipient,
+      Template,
+      E1,
+      E2,
+    ]),
 
     IdentityModule,
   ],

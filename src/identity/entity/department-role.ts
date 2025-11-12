@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 import { BaseEntity } from 'src/common/entity/base.entity';
 import { Department } from './department.entity';
 import { ApprovalWorkflowRole } from 'src/workflow/entity/approval-workflow-role.entity';
@@ -15,5 +22,6 @@ export class DepartmentRole extends BaseEntity {
   departmentId: number;
 
   @ManyToMany(() => ApprovalWorkflowRole, (en) => en.departmentRoles)
+  @JoinTable()
   approvalWorkflowRoles: ApprovalWorkflowRole[];
 }
