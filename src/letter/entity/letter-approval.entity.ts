@@ -1,12 +1,4 @@
-import {
-  Entity,
-  Column,
-  ManyToMany,
-  ManyToOne,
-  JoinColumn,
-  JoinTable,
-} from 'typeorm';
-import { ApprovalWorkflow } from '../../workflow/entity/approval-workflow.entity';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Letter } from 'src/letter/entity/letter.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 
@@ -21,8 +13,4 @@ export class LetterApproval extends BaseEntity {
 
   @Column({ nullable: true })
   letterId: number;
-
-  @ManyToMany(() => ApprovalWorkflow, (en) => en.letterApprovals)
-  @JoinTable()
-  workflow: ApprovalWorkflow;
 }
