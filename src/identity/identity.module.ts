@@ -8,7 +8,7 @@ import { User } from './entity/user.entity';
 import { UserRole } from './entity/user-roles';
 import { Permission } from './entity/permission.entity';
 import { Department } from './entity/department.entity';
-import { DepartmentRole } from './entity/department-role';
+import { DepartmentRole } from './entity/department-role.entity';
 import { DepartmentRoleService } from './service/department-role.service';
 
 @Module({

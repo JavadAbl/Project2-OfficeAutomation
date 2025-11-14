@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToMany } from 'typeorm';
 import { Letter } from './letter.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 import { Workflow } from 'src/workflow/entity/workflow.entity';
@@ -18,6 +18,5 @@ export class Template extends BaseEntity {
   letters: Letter[];
 
   @ManyToMany(() => Workflow, (en) => en.templates)
-  @JoinTable()
   workflows: Workflow[];
 }

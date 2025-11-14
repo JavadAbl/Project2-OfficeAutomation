@@ -17,17 +17,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  createUserEndpoint(@Body() payload: UserCreateRequest): Promise<UserDto> {
+  createUser(@Body() payload: UserCreateRequest): Promise<UserDto> {
     return this.userService.createUser(payload);
   }
 
   @Get('User')
-  getUsersEndpoint(@Query() payload: GetManyQueryRequest): Promise<UserDto[]> {
-    return this.userService.getUsers(payload);
+  getUsers(@Query() query: GetManyQueryRequest): Promise<UserDto[]> {
+    return this.userService.getDtoMany(UserDto, query, ['username']);
   }
 
   @Get('User/:id')
-  getUserByIdEndpoint(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
-    return this.userService.getUserById(id);
+  getUserById(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
+    return this.userService.getDtoById(UserDto, id);
   }
 }

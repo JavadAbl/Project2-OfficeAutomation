@@ -1,10 +1,10 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { DepartmentsDto } from './departments.dto';
+import { DepartmentRoleDto } from './department-role.dto';
 
 @Exclude()
-export class DepartmentDto {
+export class DepartmentDto extends DepartmentsDto {
   @Expose()
-  id: string;
-
-  @Expose()
-  name: string;
+  @Type(() => DepartmentRoleDto)
+  departmentRoles: DepartmentRoleDto[];
 }

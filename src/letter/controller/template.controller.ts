@@ -6,6 +6,8 @@ import {
   UploadedFile,
   BadRequestException,
   Get,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TemplateCreateRequest } from '../contract/request/template-create.request';
 import { TemplateService } from '../service/template.service';
@@ -32,7 +34,7 @@ export class TemplateController {
     }),
   )
   @Post()
-  createTemplateEndpoint(
+  createTemplate(
     @Body() payload: TemplateCreateRequest,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<number> {
@@ -40,7 +42,12 @@ export class TemplateController {
   }
 
   @Get()
-  getTemplatesEndpoint(): Promise<TemplateDto[]> {
-    return this.service.getDto();
+  getTemplates(): Promise<TemplateDto[]> {
+    return this.service.getDtoMany(TemplateDto);
+  }
+
+  @Get(':id')
+  getTemplateById(@Param('id', ParseIntPipe) id: number): Promise<TemplateDto> {
+    return this.service.getDtoById(TemplateDto, id);
   }
 }

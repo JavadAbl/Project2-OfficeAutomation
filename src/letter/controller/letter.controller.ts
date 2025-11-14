@@ -20,12 +20,12 @@ export class LetterController {
   constructor(private readonly service: LetterService) {}
 
   @Post()
-  createLetterEndpoint() {
+  createLetter() {
     return this.service.create();
   }
 
   @Patch(':id/SetPriority')
-  setLetterPriorityEndpoint(
+  setLetterPriority(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: LetterSetPriorityRequest,
   ): Promise<void> {
@@ -33,7 +33,7 @@ export class LetterController {
   }
 
   @Patch(':id/SetTemplate')
-  setLetterTemplateEndpoint(
+  setLetterTemplate(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: LetterSetTemplateRequest,
   ): Promise<void> {
@@ -46,7 +46,7 @@ export class LetterController {
     }),
   )
   @Post(':id/CreateAttachment')
-  createAttachmentEndpoint(
+  createAttachment(
     @Param('id', ParseIntPipe) id: number,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<void> {
@@ -54,7 +54,7 @@ export class LetterController {
   }
 
   @Post(':id/CreateRecipient')
-  createLetterRecipientEndpoint(
+  createLetterRecipient(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: LetterCreateRecipientRequest,
   ): Promise<LetterRecipientDto> {

@@ -5,37 +5,54 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
-import { DepartmentDto } from '../contract/dto/department.dto';
 import { DepartmentCreateRequest } from '../contract/request/department-create.request';
 import { DepartmentService } from '../service/department.service';
 import { DepartmentRoleCreateRequest } from '../contract/request/department-role-create.request';
+import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
+import { DepartmentsDto } from '../contract/dto/departments.dto';
+import { DepartmentDto } from '../contract/dto/department.dto';
+import { DepartmentRoleDto } from '../contract/dto/department-role.dto';
+import { DepartmentRoleService } from '../service/department-role.service';
 
 @Controller('Identity/Department')
 export class DepartmentController {
-  constructor(private readonly service: DepartmentService) {}
+  constructor(
+    private readonly service: DepartmentService,
+    private readonly roleService: DepartmentRoleService,
+  ) {}
 
   @Get()
-  getDepartmentsEndpoint(): Promise<DepartmentDto[]> {
-    return this.service.getDepartments();
+  getDepartments(
+    @Query() query: GetManyQueryRequest,
+  ): Promise<DepartmentsDto[]> {
+    return this.service.getDtoMany(DepartmentsDto, query, ['name']);
+  }
+
+  @Get('Role')
+  getDepartmentRoles(
+    @Query() query: GetManyQueryRequest,
+  ): Promise<DepartmentRoleDto[]> {
+    return this.roleService.getDtoMany(DepartmentRoleDto, query, ['name']);
   }
 
   @Get(':id')
-  getDepartmentByIdEndpoint(
+  getDepartmentById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<DepartmentDto> {
-    return this.service.getDepartmentById(id);
+    return this.service.getDtoById(DepartmentDto, id, {
+      relations: { departmentRoles: true },
+    });
   }
 
   @Post()
-  createDepartmentEndpoint(
-    @Body() payload: DepartmentCreateRequest,
-  ): Promise<DepartmentDto> {
+  createDepartment(@Body() payload: DepartmentCreateRequest): Promise<number> {
     return this.service.createDepartment(payload);
   }
 
   @Post(':id/Role')
-  createDepartmentRoleEndpoint(
+  createDepartmentRole(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: DepartmentRoleCreateRequest,
   ): Promise<number> {

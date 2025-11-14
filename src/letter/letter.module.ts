@@ -29,5 +29,6 @@ import { LetterApproval } from './entity/letter-approval.entity';
   ],
   controllers: [LetterController, TemplateController],
   providers: [LetterService, TemplateService],
+  exports: [TemplateService],
 })
 export class LetterModule {}

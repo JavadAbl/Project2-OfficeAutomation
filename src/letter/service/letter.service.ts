@@ -22,8 +22,8 @@ import { LetterRecipientDto } from '../contract/dto/letter-recipient.dto';
 
 @Injectable()
 export class LetterService extends BaseService<Letter> {
-  /*   getAndcheckExistsById: typeof CommonService.getAndcheckExistsById =
-    CommonService.getAndcheckExistsById.bind(CommonService); */
+  /*   getAndCheckExistsById: typeof CommonService.getAndCheckExistsById =
+    CommonService.getAndCheckExistsById.bind(CommonService); */
 
   constructor(
     @InjectRepository(Letter) rep: Repository<Letter>,
@@ -57,7 +57,7 @@ export class LetterService extends BaseService<Letter> {
   async setRecipient() {}
 
   async addAttachments(id: number, files: Express.Multer.File[]) {
-    await this.getAndcheckExistsById(id);
+    await this.getAndCheckExistsById(id);
     if (!files || !files.length) throw new BadRequestException('Invalid files');
 
     const publicDir = join(process.cwd(), 'public', 'attachments');

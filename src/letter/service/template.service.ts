@@ -7,8 +7,6 @@ import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { E1 } from '../entity/e1.entity';
-import { TemplateDto } from '../contract/dto/template.dto';
-import { plainToInstance } from 'class-transformer';
 import { BaseService } from 'src/common/service/base.service';
 import { E2 } from '../entity/e2.entity';
 
@@ -46,7 +44,7 @@ export class TemplateService extends BaseService<Template> {
     return 1;*/
     if (!file) throw new BadRequestException('Invalid file');
 
-    await this.checkExistsBy('name', payload.name);
+    await this.checkConflictBy('name', payload.name);
 
     const fileName = randomUUID() + '.html';
     const template = this.rep.create({ ...payload, fileName });
@@ -60,8 +58,8 @@ export class TemplateService extends BaseService<Template> {
     return templateEntity.id;
   }
 
-  async getDto(): Promise<TemplateDto[]> {
+  /*   async getDto(): Promise<TemplateDto[]> {
     const templates = await this.rep.find();
     return templates.map((template) => plainToInstance(TemplateDto, template));
-  }
+  } */
 }
