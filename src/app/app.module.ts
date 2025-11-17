@@ -7,10 +7,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LetterModule } from 'src/letter/letter.module';
 import { IdentityModule } from 'src/identity/identity.module';
 import { WorkflowModule } from 'src/workflow/workflow.module';
+import { AppConfig, appConfig } from 'src/config/app.config';
+import { configSchema, ConfigType } from 'src/config/config.type';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      load: [appConfig],
+      validationSchema: configSchema,
+    }),
+
     AuthModule,
     LetterModule,
     IdentityModule,
@@ -19,11 +27,10 @@ import { WorkflowModule } from 'src/workflow/workflow.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService<ConfigType>) => ({
         type: 'better-sqlite3',
-        database: 'app.db',
         synchronize: true,
-        // database: configService.get<string>('DB_NAME'),
+        database: configService.get<AppConfig>('app')?.databaseAddress,
         autoLoadEntities: true,
       }),
     }),
