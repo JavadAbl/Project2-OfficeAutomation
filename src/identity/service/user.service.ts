@@ -5,9 +5,10 @@ import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CryptoUtils } from 'src/common/utils/crypto.utils';
-import { Department } from '../entity/department.entity';
 import { plainToInstance } from 'class-transformer';
 import { BaseService } from 'src/common/service/base.service';
+import { UserSetDepartmentRequest } from '../contract/request/user-set-department.request';
+import { DepartmentService } from './department.service';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -15,8 +16,7 @@ export class UserService extends BaseService<User> {
     @InjectRepository(User)
     rep: Repository<User>,
 
-    @InjectRepository(Department)
-    private readonly repDep: Repository<Department>,
+    private readonly departmentService: DepartmentService,
   ) {
     super(rep, 'User');
   }
@@ -29,7 +29,8 @@ export class UserService extends BaseService<User> {
     if (exists) throw new ConflictException('Username already exists');
     const passwordHash = await CryptoUtils.hashPassword(password);
 
-    if (departmentId) await this.checkExistsById(departmentId);
+    if (departmentId)
+      await this.departmentService.checkExistsById(departmentId);
 
     const user = this.rep.create({
       ...payload,
@@ -39,5 +40,18 @@ export class UserService extends BaseService<User> {
     const savedUser = await this.rep.save(user);
     const dto = plainToInstance(UserDto, savedUser);
     return dto;
+  }
+
+  async setDepartment(
+    id: number,
+    payload: UserSetDepartmentRequest,
+  ): Promise<void> {
+    const { departmentId } = payload;
+    const user = await this.getAndCheckExistsById(id);
+
+    await this.departmentService.checkExistsById(departmentId);
+
+    user.departmentId = departmentId;
+    await this.rep.update({ id }, { departmentId });
   }
 }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentRole } from '../entity/department-role.entity';
 import { Repository } from 'typeorm';
 import { BaseService } from 'src/common/service/base.service';
-import { DepartmentRoleCreateRequest } from '../contract/request/department-role-create.request';
+import { DepartmentRoleCreateRequest } from '../contract/request/departmentRole-create.request';
 
 @Injectable()
 export class DepartmentRoleService extends BaseService<DepartmentRole> {
