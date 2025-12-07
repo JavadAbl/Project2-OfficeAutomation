@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { DepartmentCreateRequest } from '../contract/request/department-create.request';
 import { DepartmentService } from '../service/department.service';
-import { DepartmentRoleCreateRequest } from '../contract/request/department-role-create.request';
+import { DepartmentRoleCreateRequest } from '../contract/request/departmentRole-create.request';
 import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
 import { DepartmentsDto } from '../contract/dto/departments.dto';
 import { DepartmentDto } from '../contract/dto/department.dto';

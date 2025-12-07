@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsInt, IsOptional, IsString, Min, MinLength } from 'class-validator';
 
 export class UserCreateRequest {
   @IsString()
@@ -11,5 +11,6 @@ export class UserCreateRequest {
 
   @IsInt()
   @IsOptional()
+  @Min(1)
   departmentId: number;
 }
