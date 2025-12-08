@@ -10,11 +10,13 @@ import { WorkflowModule } from 'src/workflow/workflow.module';
 import { AppConfig, appConfig } from 'src/config/app.config';
 import { configSchema, ConfigType } from 'src/config/config.type';
 
+const env = process.env.NODE_ENV;
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: !env ? '.env' : `.env${env}`,
       load: [appConfig],
       validationSchema: configSchema,
     }),
@@ -30,12 +32,10 @@ import { configSchema, ConfigType } from 'src/config/config.type';
       useFactory: (configService: ConfigService<ConfigType>) => ({
         type: 'better-sqlite3',
         synchronize: true,
-        database: configService.get<AppConfig>('app')?.databaseAddress,
+        database: configService.get<AppConfig>('app')!.databaseAddress,
         autoLoadEntities: true,
       }),
     }),
-
-    //  TypeOrmModule.forFeature([Organization]),
   ],
   controllers: [AppController],
   providers: [AppService],
