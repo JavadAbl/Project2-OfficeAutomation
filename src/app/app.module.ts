@@ -8,15 +8,13 @@ import { LetterModule } from 'src/letter/letter.module';
 import { IdentityModule } from 'src/identity/identity.module';
 import { WorkflowModule } from 'src/workflow/workflow.module';
 import { AppConfig, appConfig } from 'src/config/app.config';
-import { configSchema, ConfigType } from 'src/config/config.type';
-
-const env = process.env.NODE_ENV;
+import { configSchema, ConfigType, isDev } from 'src/config/config.type';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: !env ? '.env' : `.env${env}`,
+      envFilePath: isDev ? 'dev.env' : '.env',
       load: [appConfig],
       validationSchema: configSchema,
     }),

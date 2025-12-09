@@ -13,10 +13,15 @@ import { UserDto } from '../contract/dto/user.dto';
 import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
 import { UserService } from '../service/user.service';
 import { UserSetDepartmentRequest } from '../contract/request/user-set-department.request';
+import { ConfigService } from '@nestjs/config';
+import { ConfigType } from 'src/config/config.type';
 
 @Controller('Identity/User')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly config: ConfigService<ConfigType>,
+  ) {}
 
   @Post()
   createUser(@Body() payload: UserCreateRequest): Promise<UserDto> {

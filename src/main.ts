@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { ErrorHandlerFilter } from './common/error-handler/error-handler.filter';
 import { ValidationPipe } from '@nestjs/common';
+import { AllExceptionsFilter } from './common/error-handler/error-handler.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // app.useGlobalFilters(new ErrorHandlerFilter());
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.setGlobalPrefix('/api/v1');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -14,6 +14,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
