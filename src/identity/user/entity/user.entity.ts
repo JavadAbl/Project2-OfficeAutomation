@@ -7,12 +7,12 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Department } from './department.entity';
 import { UserRole } from './user-roles';
 import { Letter } from 'src/letter/entity/letter.entity';
 import { Recipient } from 'src/letter/entity/recipient.entity';
 import { Permission } from './permission.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
+import { Department } from 'src/identity/department/entity/department.entity';
 
 @Entity()
 export class User extends BaseEntity {

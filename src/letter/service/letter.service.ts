@@ -16,7 +16,7 @@ import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { Attachment } from '../entity/attachment.entity';
 import { LetterCreateRecipientRequest } from '../contract/request/letter-create-recipient.request';
-import { UserService } from 'src/identity/service/user.service';
+import { UserService } from 'src/identity/user/service/user.service';
 import { Recipient } from '../entity/recipient.entity';
 import { LetterRecipientDto } from '../contract/dto/letter-recipient.dto';
 

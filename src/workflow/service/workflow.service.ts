@@ -8,8 +8,8 @@ import { WorkflowSetTemplatesRequest } from '../contract/request/workflow-set-te
 import { TemplateService } from 'src/letter/service/template.service';
 import { Template } from 'src/letter/entity/template.entity';
 import { WorkflowSetDepartmentRolesRequest } from '../contract/request/workflow-set-department-roles.request';
-import { DepartmentRole } from 'src/identity/entity/department-role.entity';
-import { DepartmentRoleService } from 'src/identity/service/department-role.service';
+import { DepartmentRole } from 'src/identity/department/entity/department-role.entity';
+import { DepartmentRoleService } from 'src/identity/department/department-role.service';
 
 @Injectable()
 export class WorkflowService extends BaseService<Workflow> {

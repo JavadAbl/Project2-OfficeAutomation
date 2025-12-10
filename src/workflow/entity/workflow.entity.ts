@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from 'src/common/entity/base.entity';
 import { Template } from 'src/letter/entity/template.entity';
-import { DepartmentRole } from 'src/identity/entity/department-role.entity';
+import { DepartmentRole } from 'src/identity/department/entity/department-role.entity';
 
 @Entity()
 export class Workflow extends BaseEntity {

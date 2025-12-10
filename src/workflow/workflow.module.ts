@@ -5,9 +5,15 @@ import { IdentityModule } from 'src/identity/identity.module';
 import { Workflow } from './entity/workflow.entity';
 import { WorkflowService } from './service/workflow.service';
 import { LetterModule } from 'src/letter/letter.module';
+import { DepartmentModule } from 'src/identity/department/department.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Workflow]), IdentityModule, LetterModule],
+  imports: [
+    TypeOrmModule.forFeature([Workflow]),
+    IdentityModule,
+    LetterModule,
+    DepartmentModule,
+  ],
   providers: [WorkflowService],
   controllers: [WorkflowController],
 })

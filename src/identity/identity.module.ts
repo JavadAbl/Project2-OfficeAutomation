@@ -1,28 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './controller/user.controller';
-import { DepartmentController } from './controller/department.controller';
-import { DepartmentService } from './service/department.service';
-import { UserService } from './service/user.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
-import { UserRole } from './entity/user-roles';
-import { Permission } from './entity/permission.entity';
-import { Department } from './entity/department.entity';
-import { DepartmentRole } from './entity/department-role.entity';
-import { DepartmentRoleService } from './service/department-role.service';
+import { UserModule } from './user/user.module';
+import { DepartmentModule } from './department/department.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      User,
-      UserRole,
-      Permission,
-      Department,
-      DepartmentRole,
-    ]),
-  ],
-  controllers: [UserController, DepartmentController],
-  providers: [DepartmentService, UserService, DepartmentRoleService],
-  exports: [UserService, DepartmentRoleService],
+  imports: [UserModule, DepartmentModule],
+  controllers: [],
+  providers: [],
+  exports: [],
 })
 export class IdentityModule {}

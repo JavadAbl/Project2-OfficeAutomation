@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { UserRole } from 'src/identity/entity/user-roles';
-import { User } from 'src/identity/entity/user.entity';
 import { CryptoUtils } from 'src/common/utils/crypto.utils';
 import { EntityManager } from 'typeorm';
 import { randomInt } from 'crypto';
-import { Department } from 'src/identity/entity/department.entity';
+import { Department } from 'src/identity/department/entity/department.entity';
+import { UserRole } from 'src/identity/user/entity/user-roles';
+import { User } from 'src/identity/user/entity/user.entity';
 
 @Injectable()
 export class SeedService {

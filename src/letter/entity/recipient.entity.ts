@@ -1,6 +1,6 @@
 // Recipient.ts
 import { BaseEntity } from 'src/common/entity/base.entity';
-import { User } from 'src/identity/entity/user.entity';
+import { User } from 'src/identity/user/entity/user.entity';
 import { Letter } from 'src/letter/entity/letter.entity';
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 

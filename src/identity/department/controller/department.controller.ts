@@ -14,7 +14,7 @@ import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.
 import { DepartmentsDto } from '../contract/dto/departments.dto';
 import { DepartmentDto } from '../contract/dto/department.dto';
 import { DepartmentRoleDto } from '../contract/dto/department-role.dto';
-import { DepartmentRoleService } from '../service/department-role.service';
+import { DepartmentRoleService } from '../department-role.service';
 
 @Controller('Identity/Department')
 export class DepartmentController {

@@ -1,5 +1,5 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { DepartmentRoleDto } from 'src/identity/contract/dto/department-role.dto';
+import { DepartmentRoleDto } from 'src/identity/department/contract/dto/department-role.dto';
 import { TemplateDto } from 'src/letter/contract/dto/template.dto';
 import { WorkflowsDto } from './workflows.dto';
 

@@ -8,6 +8,7 @@ export type ConfigType = {
 export const configSchema = Joi.object({
   NODE_ENV: Joi.string().required(),
   DATABASE_ADDRESS: Joi.string().required(),
+  JWT_ACCESS_SECRET: Joi.string().required(),
 });
 
 export enum nodeEnvs {

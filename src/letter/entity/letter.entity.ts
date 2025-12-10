@@ -1,4 +1,3 @@
-import { User } from 'src/identity/entity/user.entity';
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Template } from './template.entity';
 import { Recipient } from 'src/letter/entity/recipient.entity';
@@ -7,6 +6,7 @@ import { LetterApproval } from 'src/letter/entity/letter-approval.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 import { LetterStatus } from '../contract/enum/letter-status.enum';
 import { LetterPriority } from '../contract/enum/letter-priority.enum';
+import { User } from 'src/identity/user/entity/user.entity';
 
 @Entity({ synchronize: true })
 export class Letter extends BaseEntity {

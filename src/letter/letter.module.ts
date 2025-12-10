@@ -8,10 +8,8 @@ import { Recipient } from './entity/recipient.entity';
 import { Template } from './entity/template.entity';
 import { TemplateService } from './service/template.service';
 import { TemplateController } from './controller/template.controller';
-import { E1 } from './entity/e1.entity';
-import { E2 } from './entity/e2.entity';
-import { IdentityModule } from 'src/identity/identity.module';
 import { LetterApproval } from './entity/letter-approval.entity';
+import { UserModule } from 'src/identity/user/user.module';
 
 @Module({
   imports: [
@@ -21,11 +19,9 @@ import { LetterApproval } from './entity/letter-approval.entity';
       Attachment,
       Recipient,
       Template,
-      E1,
-      E2,
     ]),
 
-    IdentityModule,
+    UserModule,
   ],
   controllers: [LetterController, TemplateController],
   providers: [LetterService, TemplateService],

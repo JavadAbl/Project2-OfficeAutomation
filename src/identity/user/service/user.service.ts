@@ -1,14 +1,14 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { UserCreateRequest } from '../contract/request/user-create.request';
 import { UserDto } from '../contract/dto/user.dto';
 import { Repository } from 'typeorm';
-import { User } from '../entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CryptoUtils } from 'src/common/utils/crypto.utils';
 import { plainToInstance } from 'class-transformer';
 import { BaseService } from 'src/common/service/base.service';
+import { DepartmentService } from '../../department/service/department.service';
+import { User } from '../entity/user.entity';
 import { UserSetDepartmentRequest } from '../contract/request/user-set-department.request';
-import { DepartmentService } from './department.service';
+import { UserCreateRequest } from '../contract/request/user-create.request';
 
 @Injectable()
 export class UserService extends BaseService<User> {

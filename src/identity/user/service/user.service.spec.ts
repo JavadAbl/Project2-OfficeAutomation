@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
-import { DepartmentService } from './department.service';
+import { DepartmentService } from '../../department/service/department.service';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserCreateRequest } from '../contract/request/user-create.request';

@@ -28,17 +28,17 @@ export class UserController {
     return this.userService.createUser(payload);
   }
 
-  @Get('User')
+  @Get()
   getUsers(@Query() query: GetManyQueryRequest): Promise<UserDto[]> {
     return this.userService.getDtoMany(UserDto, query, ['username']);
   }
 
-  @Get('User/:id')
+  @Get(':id')
   getUserById(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
     return this.userService.getDtoById(UserDto, id);
   }
 
-  @Patch('User/:id')
+  @Patch(':id')
   setUserDepartment(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UserSetDepartmentRequest,
