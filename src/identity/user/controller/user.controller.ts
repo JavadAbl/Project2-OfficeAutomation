@@ -15,6 +15,7 @@ import { UserService } from '../service/user.service';
 import { UserSetDepartmentRequest } from '../contract/request/user-set-department.request';
 import { ConfigService } from '@nestjs/config';
 import { ConfigType } from 'src/config/config.type';
+import { UserSetRoleRequest } from '../contract/request/user-set-role.request';
 
 @Controller('Identity/User')
 export class UserController {
@@ -44,5 +45,13 @@ export class UserController {
     @Body() payload: UserSetDepartmentRequest,
   ): Promise<void> {
     return this.userService.setDepartment(id, payload);
+  }
+
+  @Patch(':id')
+  setUserRole(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UserSetRoleRequest,
+  ): Promise<void> {
+    return this.userService.setRole(id, payload);
   }
 }

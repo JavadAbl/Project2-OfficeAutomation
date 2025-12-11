@@ -5,7 +5,7 @@ import { Department } from '../entity/department.entity';
 import { DepartmentCreateRequest } from '../contract/request/department-create.request';
 import { BaseService } from 'src/common/service/base.service';
 import { DepartmentRoleCreateRequest } from '../contract/request/departmentRole-create.request';
-import { DepartmentRoleService } from '../department-role.service';
+import { DepartmentRoleService } from './department-role.service';
 
 @Injectable()
 export class DepartmentService extends BaseService<Department> {

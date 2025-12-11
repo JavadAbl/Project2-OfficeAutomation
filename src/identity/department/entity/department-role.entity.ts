@@ -11,6 +11,7 @@ export class DepartmentRole extends BaseEntity {
   @ManyToOne(() => Department, (en) => en.departmentRoles, { nullable: false })
   @JoinColumn({ name: 'departmentId' })
   department: Department;
+
   @Column({ nullable: false })
   departmentId: number;
 
