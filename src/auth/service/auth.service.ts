@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthLoginRequest } from '../contract/request/auth-login.request';
@@ -17,6 +18,7 @@ import { Repository } from 'typeorm';
 import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
 import { mapQueryToFindOptions } from 'src/common/utils/typeorm.utils';
 import { AuthRoleDto } from '../contract/dto/auth-role.dto';
+import { AccessTokenPayload } from '../contract/interface/access-token-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -31,10 +33,10 @@ export class AuthService {
 
   async login(payload: AuthLoginRequest): Promise<AuthDto> {
     const { password, username } = payload;
-    const user = await this.userService.getAndCheckExistsBy(
-      'username',
-      username,
-    );
+    const user = await this.userService.getBy('username', username, {
+      relations: { departmentRole: true },
+    });
+    if (!user) throw new NotFoundException('User with this id not found');
 
     const isPasswordMatch = await this.hashingProvider.comparePassword(
       password,
@@ -43,7 +45,11 @@ export class AuthService {
 
     if (!isPasswordMatch) throw new UnauthorizedException('Invalid password');
 
-    const accessToken = await this.jwtService.signAsync({ userId: user.id });
+    const accessTokenPayload: AccessTokenPayload = {
+      userId: user.id,
+      authRoleId: user?.departmentRole?.authRoleId,
+    };
+    const accessToken = await this.jwtService.signAsync(accessTokenPayload);
 
     const userDto = plainToInstance(UserDto, user);
     return { user: userDto, accessToken };

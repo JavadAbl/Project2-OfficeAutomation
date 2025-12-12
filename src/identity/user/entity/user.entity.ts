@@ -14,10 +14,10 @@ export class User extends BaseEntity {
 
   @ManyToOne(() => DepartmentRole, (entity) => entity.users, { nullable: true })
   @JoinColumn({ name: 'departmentRoleId' })
-  departmentRole: DepartmentRole;
+  departmentRole: DepartmentRole | null;
 
   @Column({ nullable: true })
-  departmentRoleId: number;
+  departmentRoleId: number | null;
 
   @OneToMany(() => Letter, (Letter) => Letter.creatorUser)
   createdLetters: Letter[];

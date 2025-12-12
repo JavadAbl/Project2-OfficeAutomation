@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
 import { AuthLoginRequest } from '../contract/request/auth-login.request';
-import { Public } from 'src/common/decorators/is-public/public.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
 import { AuthDto } from '../contract/dto/auth.dto';
 import { AuthCreateRoleRequest } from '../contract/request/auth-create-role.request';
 import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';

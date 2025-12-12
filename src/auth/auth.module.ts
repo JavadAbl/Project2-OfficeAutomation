@@ -12,6 +12,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthRole } from './entity/auth-role';
+import { RoleGuard } from 'src/common/guards/role.guard';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AuthRole } from './entity/auth-role';
     AuthService,
     { provide: HashingProvider, useClass: BCryptProvider },
     { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: RoleGuard },
   ],
   exports: [HashingProvider, AuthService],
 })

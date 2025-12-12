@@ -32,7 +32,7 @@ export class DepartmentRole extends BaseEntity {
   authRoleId: number;
 
   @OneToMany(() => User, (u) => u.departmentRole)
-  users: User;
+  users: User[];
 
   @ManyToMany(() => Workflow, (en) => en.departmentRoles)
   workflows: Workflow[];

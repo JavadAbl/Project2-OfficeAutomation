@@ -15,6 +15,7 @@ import { UserService } from '../service/user.service';
 import { UserSetDepartmentRoleRequest } from '../contract/request/user-set-department-role.request';
 import { ConfigService } from '@nestjs/config';
 import { ConfigType } from 'src/config/config.type';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('Identity/User')
 export class UserController {
@@ -28,6 +29,7 @@ export class UserController {
     return this.userService.createUser(payload);
   }
 
+  @Roles(1)
   @Get()
   getUsers(@Query() query: GetManyQueryRequest): Promise<UserDto[]> {
     return this.userService.getDtoMany(UserDto, query, ['username']);
