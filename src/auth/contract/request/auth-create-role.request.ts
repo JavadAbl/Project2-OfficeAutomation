@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class DepartmentRoleCreateRequest {
+export class AuthCreateRoleRequest {
   @IsString()
   @IsNotEmpty()
   name: string;

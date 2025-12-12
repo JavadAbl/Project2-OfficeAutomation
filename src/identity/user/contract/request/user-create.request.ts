@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, Min, MinLength } from 'class-validator';
+import { IsOptional, IsPositive, IsString, MinLength } from 'class-validator';
 
 export class UserCreateRequest {
   @IsString()
@@ -9,8 +9,7 @@ export class UserCreateRequest {
   @MinLength(3)
   password: string;
 
-  @IsInt()
   @IsOptional()
-  @Min(1)
-  departmentId: number;
+  @IsPositive()
+  departmentRoleId: number;
 }

@@ -6,7 +6,7 @@ import { DepartmentService } from '../../department/service/department.service';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserCreateRequest } from '../contract/request/user-create.request';
-import { UserSetDepartmentRequest } from '../contract/request/user-set-department.request';
+import { UserSetDepartmentRequest } from '../contract/request/user-set-department-role.request';
 import { UserDto } from '../contract/dto/user.dto';
 import { CryptoUtils } from 'src/common/utils/crypto.utils';
 import { ClassTransformer } from 'class-transformer';

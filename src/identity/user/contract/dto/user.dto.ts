@@ -9,5 +9,5 @@ export class UserDto {
   username: string;
 
   @Expose()
-  departmentId: string;
+  departmentRoleId: string;
 }

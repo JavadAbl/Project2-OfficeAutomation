@@ -1,18 +1,8 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
-import { UserRole } from './user-roles';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Letter } from 'src/letter/entity/letter.entity';
 import { Recipient } from 'src/letter/entity/recipient.entity';
-import { Permission } from './permission.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
-import { Department } from 'src/identity/department/entity/department.entity';
+import { DepartmentRole } from 'src/identity/department/entity/department-role.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -22,24 +12,16 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @ManyToOne(() => Department, (entity) => entity.users, { nullable: true })
-  @JoinColumn({ name: 'departmentId' })
-  department: Department;
-  @Column({ nullable: true })
-  departmentId: number;
+  @ManyToOne(() => DepartmentRole, (entity) => entity.users, { nullable: true })
+  @JoinColumn({ name: 'departmentRoleId' })
+  departmentRole: DepartmentRole;
 
-  @ManyToOne(() => UserRole, (entity) => entity.users)
-  role: UserRole;
+  @Column({ nullable: true })
+  departmentRoleId: number;
 
   @OneToMany(() => Letter, (Letter) => Letter.creatorUser)
   createdLetters: Letter[];
 
   @OneToMany(() => Recipient, (recipient) => recipient.user)
   recipientEntries: Recipient[];
-
-  @ManyToMany(() => Permission, (permission) => permission.roles)
-  @JoinTable({
-    name: 'user_permissions',
-  })
-  permissions: Permission[];
 }

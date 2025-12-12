@@ -10,9 +10,13 @@ import { AppConfig } from 'src/config/app.config';
 import { UserModule } from 'src/identity/user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthRole } from './entity/auth-role';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([AuthRole]),
+
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -33,6 +37,6 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
     { provide: HashingProvider, useClass: BCryptProvider },
     { provide: APP_GUARD, useClass: AuthGuard },
   ],
-  exports: [HashingProvider],
+  exports: [HashingProvider, AuthService],
 })
 export class AuthModule {}

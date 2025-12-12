@@ -1,16 +1,10 @@
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class DepartmentRoleDto {
+export class AuthRoleDto {
   @Expose()
   id: number;
 
   @Expose()
   name: string;
-
-  @Expose()
-  departmentId: number;
-
-  @Expose()
-  authRoleId: number;
 }

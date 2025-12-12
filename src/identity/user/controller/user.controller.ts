@@ -12,10 +12,9 @@ import { UserCreateRequest } from '../contract/request/user-create.request';
 import { UserDto } from '../contract/dto/user.dto';
 import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
 import { UserService } from '../service/user.service';
-import { UserSetDepartmentRequest } from '../contract/request/user-set-department.request';
+import { UserSetDepartmentRoleRequest } from '../contract/request/user-set-department-role.request';
 import { ConfigService } from '@nestjs/config';
 import { ConfigType } from 'src/config/config.type';
-import { UserSetRoleRequest } from '../contract/request/user-set-role.request';
 
 @Controller('Identity/User')
 export class UserController {
@@ -42,16 +41,8 @@ export class UserController {
   @Patch(':id')
   setUserDepartment(
     @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UserSetDepartmentRequest,
+    @Body() payload: UserSetDepartmentRoleRequest,
   ): Promise<void> {
-    return this.userService.setDepartment(id, payload);
-  }
-
-  @Patch(':id')
-  setUserRole(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UserSetRoleRequest,
-  ): Promise<void> {
-    return this.userService.setRole(id, payload);
+    return this.userService.setDepartmentRole(id, payload);
   }
 }
