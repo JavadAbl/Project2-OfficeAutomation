@@ -1,10 +1,11 @@
-import { IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { AuthRole } from 'src/auth/enum/auth-role.enum';
 
 export class DepartmentRoleCreateRequest {
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @IsPositive()
-  authRoleId: number;
+  @IsEnum(AuthRole)
+  authRole: AuthRole;
 }

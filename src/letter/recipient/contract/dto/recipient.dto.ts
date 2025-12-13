@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class LetterRecipientDto {
+export class RecipientDto {
   @Expose()
   id: number;
 
@@ -9,5 +9,5 @@ export class LetterRecipientDto {
   letterId: number;
 
   @Expose()
-  userId: number;
+  senderId: number;
 }

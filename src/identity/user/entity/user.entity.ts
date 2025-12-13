@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Letter } from 'src/letter/entity/letter.entity';
-import { Recipient } from 'src/letter/entity/recipient.entity';
+import { Recipient } from 'src/letter/recipient/entity/recipient.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
 import { DepartmentRole } from 'src/identity/department/entity/department-role.entity';
 

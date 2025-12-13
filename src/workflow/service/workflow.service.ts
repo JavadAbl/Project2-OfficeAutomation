@@ -5,11 +5,11 @@ import { BaseService } from 'src/common/service/base.service';
 import { WorkflowCreateRequest } from '../contract/request/workflow-create.request';
 import { Workflow } from '../entity/workflow.entity';
 import { WorkflowSetTemplatesRequest } from '../contract/request/workflow-set-templates.request';
-import { TemplateService } from 'src/letter/service/template.service';
-import { Template } from 'src/letter/entity/template.entity';
+import { Template } from 'src/letter/template/entity/template.entity';
 import { WorkflowSetDepartmentRolesRequest } from '../contract/request/workflow-set-department-roles.request';
 import { DepartmentRole } from 'src/identity/department/entity/department-role.entity';
 import { DepartmentRoleService } from 'src/identity/department/service/department-role.service';
+import { TemplateService } from 'src/letter/template/service/template.service';
 
 @Injectable()
 export class WorkflowService extends BaseService<Workflow> {

@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
-import { Template } from './template.entity';
-import { Recipient } from 'src/letter/entity/recipient.entity';
+import { Template } from '../template/entity/template.entity';
+import { Recipient } from 'src/letter/recipient/entity/recipient.entity';
 import { Attachment } from './attachment.entity';
 import { LetterApproval } from 'src/letter/entity/letter-approval.entity';
 import { BaseEntity } from 'src/common/entity/base.entity';
@@ -13,7 +13,7 @@ export class Letter extends BaseEntity {
   @Column({ unique: true })
   number: string;
 
-  @Column({ nullable: true })
+  @Column()
   subject: string;
 
   @Column({ nullable: true })
@@ -25,13 +25,18 @@ export class Letter extends BaseEntity {
   @Column({ default: LetterPriority.Normal, enum: LetterPriority })
   priority: LetterPriority;
 
-  @ManyToOne(() => User, (user) => user.createdLetters, { nullable: true })
+  @ManyToOne(() => User, (user) => user.createdLetters, { nullable: false })
+  @JoinColumn({ name: 'creatorUserId' })
   creatorUser: User;
 
-  @ManyToOne(() => Template, (template) => template.letters)
+  @Column({ nullable: false })
+  creatorUserId: number;
+
+  @ManyToOne(() => Template, { nullable: false })
   @JoinColumn({ name: 'templateId' })
   template: Template;
-  @Column({ nullable: true })
+
+  @Column({ nullable: false })
   templateId: number;
 
   @OneToMany(() => Recipient, (recipient) => recipient.letter)

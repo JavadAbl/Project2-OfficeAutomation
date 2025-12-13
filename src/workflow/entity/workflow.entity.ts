@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from 'src/common/entity/base.entity';
-import { Template } from 'src/letter/entity/template.entity';
+import { Template } from 'src/letter/template/entity/template.entity';
 import { DepartmentRole } from 'src/identity/department/entity/department-role.entity';
 
 @Entity()

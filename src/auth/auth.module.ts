@@ -10,14 +10,10 @@ import { AppConfig } from 'src/config/app.config';
 import { UserModule } from 'src/identity/user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthRole } from './entity/auth-role';
 import { RoleGuard } from 'src/common/guards/role.guard';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AuthRole]),
-
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

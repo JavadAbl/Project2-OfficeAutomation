@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,21 +10,13 @@ import { HashingProvider } from '../providers/hashing.provider';
 import { plainToInstance } from 'class-transformer';
 import { UserDto } from 'src/identity/user/contract/dto/user.dto';
 import { AuthDto } from '../contract/dto/auth.dto';
-import { AuthCreateRoleRequest } from '../contract/request/auth-create-role.request';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AuthRole } from '../entity/auth-role';
-import { Repository } from 'typeorm';
-import { GetManyQueryRequest } from 'src/common/contract/request/get-many-query.request';
-import { mapQueryToFindOptions } from 'src/common/utils/typeorm.utils';
-import { AuthRoleDto } from '../contract/dto/auth-role.dto';
 import { AccessTokenPayload } from '../contract/interface/access-token-payload.interface';
+import { AuthRole } from '../enum/auth-role.enum';
+import { enumToObject } from 'src/common/utils/app.utils';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(AuthRole)
-    private readonly authRoleRep: Repository<AuthRole>,
-
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
     private readonly hashingProvider: HashingProvider,
@@ -47,7 +38,7 @@ export class AuthService {
 
     const accessTokenPayload: AccessTokenPayload = {
       userId: user.id,
-      authRoleId: user?.departmentRole?.authRoleId,
+      authRoleId: user?.departmentRole?.authRole,
     };
     const accessToken = await this.jwtService.signAsync(accessTokenPayload);
 
@@ -55,24 +46,7 @@ export class AuthService {
     return { user: userDto, accessToken };
   }
 
-  async createAuthRole(payload: AuthCreateRoleRequest): Promise<number> {
-    const { name } = payload;
-    const isRoleExists = await this.authRoleRep.existsBy({ name });
-
-    if (isRoleExists) throw new ConflictException('Role with this name exists');
-
-    let authRole = this.authRoleRep.create({ name });
-    authRole = await this.authRoleRep.save(authRole);
-
-    return authRole.id;
-  }
-
-  getAuthRoles(query: GetManyQueryRequest): Promise<AuthRoleDto[]> {
-    const predicates = mapQueryToFindOptions<AuthRole>(query, ['name']);
-    return this.authRoleRep.find(predicates);
-  }
-
-  checkExistsAuthRoleById(id: number): Promise<boolean> {
-    return this.authRoleRep.existsBy({ id });
+  getAuthRoles(): Record<string, any> {
+    return enumToObject(AuthRole);
   }
 }

@@ -17,4 +17,7 @@ export class Recipient extends BaseEntity {
   user: User;
   @Column()
   userId: number;
+
+  @Column({ default: false })
+  IsSeen: boolean;
 }

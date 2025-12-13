@@ -1,30 +1,24 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { LetterController } from './controller/letter.controller';
 import { LetterService } from './service/letter.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Letter } from './entity/letter.entity';
 import { Attachment } from './entity/attachment.entity';
-import { Recipient } from './entity/recipient.entity';
-import { Template } from './entity/template.entity';
-import { TemplateService } from './service/template.service';
-import { TemplateController } from './controller/template.controller';
+import { Recipient } from './recipient/entity/recipient.entity';
+import { Template } from './template/entity/template.entity';
+import { TemplateController } from './template/controller/template.controller';
 import { LetterApproval } from './entity/letter-approval.entity';
-import { UserModule } from 'src/identity/user/user.module';
+import { TemplateModule } from './template/template.module';
+import { RecipientModule } from './recipient/recipient.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Letter,
-      LetterApproval,
-      Attachment,
-      Recipient,
-      Template,
-    ]),
-
-    UserModule,
+    TypeOrmModule.forFeature([Letter, LetterApproval, Attachment, Recipient, Template]),
+    TemplateModule,
+    forwardRef(() => RecipientModule),
   ],
   controllers: [LetterController, TemplateController],
-  providers: [LetterService, TemplateService],
-  exports: [TemplateService],
+  providers: [LetterService],
+  exports: [LetterService],
 })
 export class LetterModule {}

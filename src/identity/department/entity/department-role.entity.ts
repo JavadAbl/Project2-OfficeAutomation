@@ -9,8 +9,8 @@ import {
 import { BaseEntity } from 'src/common/entity/base.entity';
 import { Department } from './department.entity';
 import { Workflow } from 'src/workflow/entity/workflow.entity';
-import { AuthRole } from 'src/auth/entity/auth-role';
 import { User } from 'src/identity/user/entity/user.entity';
+import { AuthRole } from 'src/auth/enum/auth-role.enum';
 
 @Entity()
 export class DepartmentRole extends BaseEntity {
@@ -24,12 +24,8 @@ export class DepartmentRole extends BaseEntity {
   @Column({ nullable: false })
   departmentId: number;
 
-  @ManyToOne(() => AuthRole, { nullable: false })
-  @JoinColumn({ name: 'authRoleId' })
+  @Column({ nullable: false, enum: AuthRole })
   authRole: AuthRole;
-
-  @Column({ nullable: false, default: 3 })
-  authRoleId: number;
 
   @OneToMany(() => User, (u) => u.departmentRole)
   users: User[];

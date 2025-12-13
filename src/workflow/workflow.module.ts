@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WorkflowController } from './controller/workflow.controller';
-import { IdentityModule } from 'src/identity/identity.module';
 import { Workflow } from './entity/workflow.entity';
 import { WorkflowService } from './service/workflow.service';
 import { LetterModule } from 'src/letter/letter.module';
 import { DepartmentModule } from 'src/identity/department/department.module';
+import { TemplateModule } from 'src/letter/template/template.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Workflow]),
-    IdentityModule,
     LetterModule,
     DepartmentModule,
+    TemplateModule,
   ],
   providers: [WorkflowService],
   controllers: [WorkflowController],

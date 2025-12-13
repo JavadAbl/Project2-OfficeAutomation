@@ -2,23 +2,16 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Letter } from '../entity/letter.entity';
 import { Repository } from 'typeorm';
-import {
-  generateLetterNumber,
-  getFileNameAndExt,
-} from 'src/common/utils/app.utils';
+import { generateLetterNumber, getFileNameAndExt } from 'src/common/utils/app.utils';
 import { plainToInstance } from 'class-transformer';
 import { letterDto } from '../contract/dto/letter.dto';
-import { LetterSetPriorityRequest } from '../contract/request/letter-set-priority.request';
-import { LetterSetTemplateRequest } from '../contract/request/letter-set-template.request';
-import { TemplateService } from './template.service';
 import { BaseService } from 'src/common/service/base.service';
 import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { Attachment } from '../entity/attachment.entity';
-import { LetterCreateRecipientRequest } from '../contract/request/letter-create-recipient.request';
-import { UserService } from 'src/identity/user/service/user.service';
-import { Recipient } from '../entity/recipient.entity';
-import { LetterRecipientDto } from '../contract/dto/letter-recipient.dto';
+import { LetterCreateRequest } from '../contract/request/letter-create.request';
+import { TemplateService } from '../template/service/template.service';
+import { AccessTokenPayload } from 'src/auth/contract/interface/access-token-payload.interface';
 
 @Injectable()
 export class LetterService extends BaseService<Letter> {
@@ -31,30 +24,24 @@ export class LetterService extends BaseService<Letter> {
     @InjectRepository(Attachment)
     private readonly repAttachment: Repository<Attachment>,
 
-    @InjectRepository(Recipient)
-    private readonly repRecipient: Repository<Recipient>,
-
     private readonly templateService: TemplateService,
-    private readonly userService: UserService,
   ) {
-    super(rep, 'Letter');
+    super(rep, Letter.name);
   }
 
-  async create() {
+  async create(payload: LetterCreateRequest, tokenPayload: AccessTokenPayload) {
+    const { templateId } = payload;
+    const { userId } = tokenPayload;
+
+    await this.templateService.checkExistsById(templateId);
+
     const letterNumber = generateLetterNumber();
-    let newLetter = this.rep.create({ number: letterNumber });
+
+    let newLetter = this.rep.create({ ...payload, number: letterNumber, creatorUserId: userId });
     newLetter = await this.rep.save(newLetter);
 
     return plainToInstance(letterDto, newLetter);
   }
-
-  async setPriority(id: number, payload: LetterSetPriorityRequest) {
-    const { priority } = payload;
-    await this.checkExistsById(id);
-    await this.rep.update({ id }, { priority });
-  }
-
-  async setRecipient() {}
 
   async addAttachments(id: number, files: Express.Multer.File[]) {
     await this.getAndCheckExistsById(id);
@@ -71,14 +58,9 @@ export class LetterService extends BaseService<Letter> {
 
         await writeFile(filePath, file.buffer);
 
-        const attachment = this.repAttachment.create({
-          letterId: id,
-          fileName,
-        });
+        const attachment = this.repAttachment.create({ letterId: id, fileName });
 
-        const existingAttachment = await this.repAttachment.findOneBy({
-          fileName,
-        });
+        const existingAttachment = await this.repAttachment.findOneBy({ fileName });
         if (existingAttachment) {
           await this.repAttachment.delete(existingAttachment.id);
         }
@@ -88,38 +70,5 @@ export class LetterService extends BaseService<Letter> {
     );
 
     await this.repAttachment.save(attachments);
-  }
-
-  async setTemplate(
-    id: number,
-    payload: LetterSetTemplateRequest,
-  ): Promise<void> {
-    const { templateId } = payload;
-    await this.checkExistsById(id);
-    await this.templateService.checkExistsById(templateId);
-    await this.rep.update({ id }, { templateId });
-  }
-
-  async createRecipient(
-    letterId: number,
-    payload: LetterCreateRecipientRequest,
-  ): Promise<LetterRecipientDto> {
-    //Todo a user cannot create recipient for itself
-    const { userId } = payload;
-    await this.checkExistsById(letterId);
-    await this.userService.checkExistsById(userId);
-
-    let recipient = this.repRecipient.create({
-      letterId,
-      userId,
-    });
-
-    recipient = await this.repRecipient.save(recipient);
-
-    return { id: recipient.id, letterId, userId };
-  }
-
-  getById(id: number) {
-    return this.rep.findOneBy({ id });
   }
 }

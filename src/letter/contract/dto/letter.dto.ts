@@ -14,7 +14,7 @@ export class letterDto {
   subject: string;
 
   @Expose()
-  body: string;
+  body: string | null;
 
   @Expose()
   status: LetterStatus;
@@ -32,4 +32,10 @@ export class letterDto {
 
   @Expose()
   templateId: number;
+
+  @Expose()
+  createdAt: Date;
+
+  @Expose()
+  updatedAt: Date;
 }

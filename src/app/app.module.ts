@@ -9,7 +9,6 @@ import { IdentityModule } from 'src/identity/identity.module';
 import { WorkflowModule } from 'src/workflow/workflow.module';
 import { AppConfig, appConfig } from 'src/config/app.config';
 import { configSchema, ConfigType, isDev } from 'src/config/config.type';
-import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -33,6 +32,7 @@ import { JwtModule } from '@nestjs/jwt';
         synchronize: true,
         database: configService.get<AppConfig>('app')!.databaseAddress,
         autoLoadEntities: true,
+        logging: true,
       }),
     }),
   ],
