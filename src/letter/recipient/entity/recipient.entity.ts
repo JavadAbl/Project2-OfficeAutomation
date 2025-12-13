@@ -12,11 +12,17 @@ export class Recipient extends BaseEntity {
   @Column()
   letterId: number;
 
-  @ManyToOne(() => User, (user) => user.recipientEntries, { nullable: true })
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  @ManyToOne(() => User, { nullable: false })
+  @JoinColumn({ name: 'receiverId' })
+  receiver: User;
   @Column()
-  userId: number;
+  receiverId: number;
+
+  @ManyToOne(() => User, { nullable: false })
+  @JoinColumn({ name: 'senderId' })
+  sender: User;
+  @Column()
+  senderId: number;
 
   @Column({ default: false })
   IsSeen: boolean;

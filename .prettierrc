@@ -1,8 +1,1 @@
-{
-  "singleQuote": true,
-  "trailingComma": "all",
-  "endOfLine": "auto",
-  "objectWrap": "collapse",
-  "proseWrap": "always",
-  "printWidth": 100
-}
+{ "singleQuote": true, "trailingComma": "all", "endOfLine": "auto", "objectWrap": "collapse", "proseWrap": "always", "printWidth": 140 }
