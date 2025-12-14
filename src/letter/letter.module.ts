@@ -10,6 +10,7 @@ import { TemplateController } from './template/controller/template.controller';
 import { LetterApproval } from './entity/letter-approval.entity';
 import { TemplateModule } from './template/template.module';
 import { RecipientModule } from './recipient/recipient.module';
+import { LetterApprovalService } from './service/letter-approval.service';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { RecipientModule } from './recipient/recipient.module';
     forwardRef(() => RecipientModule),
   ],
   controllers: [LetterController, TemplateController],
-  providers: [LetterService],
+  providers: [LetterService, LetterApprovalService],
   exports: [LetterService],
 })
 export class LetterModule {}

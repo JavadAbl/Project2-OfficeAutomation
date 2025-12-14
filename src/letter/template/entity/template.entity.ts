@@ -12,5 +12,5 @@ export class Template extends BaseEntity {
 
   @ManyToMany(() => DepartmentRole)
   @JoinTable({ name: 'template_approvals' })
-  approvalDepartmentRoles: DepartmentRole[];
+  approvalDepartmentRoles: DepartmentRole[] = [];
 }

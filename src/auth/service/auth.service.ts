@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { AuthLoginRequest } from '../contract/request/auth-login.request';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/identity/user/service/user.service';
@@ -24,21 +20,17 @@ export class AuthService {
 
   async login(payload: AuthLoginRequest): Promise<AuthDto> {
     const { password, username } = payload;
-    const user = await this.userService.getBy('username', username, {
-      relations: { departmentRole: true },
-    });
+    const user = await this.userService.getBy('username', username, { relations: { departmentRole: true } });
     if (!user) throw new NotFoundException('User with this id not found');
 
-    const isPasswordMatch = await this.hashingProvider.comparePassword(
-      password,
-      user.password,
-    );
+    const isPasswordMatch = await this.hashingProvider.comparePassword(password, user.password);
 
     if (!isPasswordMatch) throw new UnauthorizedException('Invalid password');
 
     const accessTokenPayload: AccessTokenPayload = {
       userId: user.id,
       authRoleId: user?.departmentRole?.authRole,
+      departmentRoleId: user?.departmentRoleId,
     };
     const accessToken = await this.jwtService.signAsync(accessTokenPayload);
 

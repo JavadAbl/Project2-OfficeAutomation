@@ -12,8 +12,8 @@ export class User extends BaseEntity {
 
   @ManyToOne(() => DepartmentRole, { nullable: true })
   @JoinColumn({ name: 'departmentRoleId' })
-  departmentRole: DepartmentRole | null;
+  departmentRole: DepartmentRole;
 
   @Column({ nullable: true })
-  departmentRoleId: number | null;
+  departmentRoleId: number;
 }

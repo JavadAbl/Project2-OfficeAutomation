@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Letter } from '../entity/letter.entity';
 import { Repository } from 'typeorm';
@@ -14,6 +14,7 @@ import { TemplateService } from '../template/service/template.service';
 import { AccessTokenPayload } from 'src/auth/contract/interface/access-token-payload.interface';
 import { RecipientService } from '../recipient/service/recipient.service';
 import { LetterStatus } from '../contract/enum/letter-status.enum';
+import { LetterApprovalService } from './letter-approval.service';
 
 @Injectable()
 export class LetterService extends BaseService<Letter> {
@@ -30,6 +31,8 @@ export class LetterService extends BaseService<Letter> {
 
     @Inject(forwardRef(() => RecipientService))
     private readonly recipientService: RecipientService,
+
+    private readonly letterApprovalService: LetterApprovalService,
   ) {
     super(rep, Letter.name);
   }
@@ -38,12 +41,23 @@ export class LetterService extends BaseService<Letter> {
     const { templateId } = payload;
     const { userId } = tokenPayload;
 
-    await this.templateService.checkExistsById(templateId);
+    const template = await this.templateService.getBy('id', templateId, { relations: { approvalDepartmentRoles: true } });
 
+    if (!template) throw new NotFoundException('Template not found');
+
+    const templateApprovalRoles = template.approvalDepartmentRoles;
     const letterNumber = generateLetterNumber();
 
     let newLetter = this.rep.create({ ...payload, number: letterNumber, creatorUserId: userId });
     newLetter = await this.rep.save(newLetter);
+
+    if (templateApprovalRoles.length) {
+      for (const tar of templateApprovalRoles) {
+        await this.letterApprovalService.create(newLetter.id, tar.id);
+      }
+      newLetter.status = LetterStatus.pending;
+      await this.rep.save(newLetter);
+    }
 
     return plainToInstance(letterDto, newLetter);
   }

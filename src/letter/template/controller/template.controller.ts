@@ -1,8 +1,18 @@
-import { Body, Controller, Post, UseInterceptors, UploadedFile, BadRequestException, Get, Param, ParseIntPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
+  Get,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { TemplateCreateApprovalsRequest } from '../contract/request/template-set-approvals.request';
 import { TemplateService } from '../service/template.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { TemplateDto } from '../../contract/dto/template.dto';
+import { TemplateDto } from '../contract/dto/template.dto';
 import { TemplateCreateRequest } from '../contract/request/template-create.request';
 
 @Controller('letter/template')
@@ -27,7 +37,10 @@ export class TemplateController {
   }
 
   @Post(':id/DepartmentRoleApprovals')
-  createDepartmentRoleApprovals(@Param('id', ParseIntPipe) id: number, @Body() payload: TemplateCreateApprovalsRequest): Promise<void> {
+  createDepartmentRoleApprovals(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: TemplateCreateApprovalsRequest,
+  ): Promise<void> {
     return this.service.createDepartmentRoleApprovals(id, payload);
   }
 
