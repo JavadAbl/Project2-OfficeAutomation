@@ -1,11 +1,12 @@
 import { Type } from 'class-transformer';
-import { ArrayNotEmpty, IsPositive } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsPositive } from 'class-validator';
 
 export class RecipientCreateRequest {
+  @IsArray()
   @ArrayNotEmpty()
   @Type(() => Number)
   @IsPositive({ each: true })
-  userIds: number[];
+  receiverIds: number[];
 
   @IsPositive()
   letterId: number;

@@ -1,12 +1,6 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import {
-  FindManyOptions,
-  FindOneOptions,
-  FindOptionsWhere,
-  ObjectLiteral,
-  Repository,
-} from 'typeorm';
+import { FindManyOptions, FindOneOptions, FindOptionsWhere, ObjectLiteral, Repository, UpdateResult } from 'typeorm';
 import { GetManyQueryRequest } from '../contract/request/get-many-query.request';
 import { mapQueryToFindOptions } from '../utils/typeorm.utils';
 
@@ -22,10 +16,7 @@ export class BaseService<T extends AppEntity> {
     private entityName,
   ) {}
 
-  async getById(
-    id: number,
-    extraOptions?: FindOneOptions<T>,
-  ): Promise<T | null> {
+  async getById(id: number, extraOptions?: FindOneOptions<T>): Promise<T | null> {
     const entity = await this.rep.findOne({
       where: { id: id } as FindOptionsWhere<T>,
       ...extraOptions,
@@ -33,11 +24,7 @@ export class BaseService<T extends AppEntity> {
     return entity;
   }
 
-  async getBy(
-    field: string,
-    value: any,
-    extraOptions?: FindOneOptions<T>,
-  ): Promise<T | null> {
+  async getBy(field: keyof T, value: any, extraOptions?: FindOneOptions<T>): Promise<T | null> {
     const entity = await this.rep.findOne({
       where: { [field]: value } as FindOptionsWhere<T>,
       ...extraOptions,
@@ -45,14 +32,27 @@ export class BaseService<T extends AppEntity> {
     return entity;
   }
 
-  async getMany(
-    query: GetManyQueryRequest = {},
-    searchableFields?: (keyof T)[],
-    extraOptions?: FindManyOptions<T>,
-  ): Promise<T[]> {
+  async getMany(query: GetManyQueryRequest = {}, searchableFields?: (keyof T)[], extraOptions?: FindManyOptions<T>): Promise<T[]> {
     const params = mapQueryToFindOptions<T>(query, searchableFields);
     const entities = await this.rep.find({ ...params, ...extraOptions });
     return entities;
+  }
+
+  async findMany(predicate: { field: keyof T; value: any }[], query: GetManyQueryRequest = {}): Promise<T[]> {
+    const params = mapQueryToFindOptions<T>(query);
+    const where: any = {};
+    predicate.forEach((val) => {
+      where[val.field] = val.value;
+    });
+    return this.rep.find({ ...params, where });
+  }
+
+  async findOne(predicate: { field: keyof T; value: any }[]): Promise<T | null> {
+    const where: any = {};
+    predicate.forEach((val) => {
+      where[val.field] = val.value;
+    });
+    return this.rep.findOneBy(where);
   }
 
   async getDtoMany<D>(
@@ -65,39 +65,23 @@ export class BaseService<T extends AppEntity> {
     return entities.map((val) => plainToInstance(cls, val, {}));
   }
 
-  async getDtoById<D>(
-    cls: ClassType<D>,
-    id: number,
-    extraOptions?: FindManyOptions<T>,
-  ): Promise<D> {
+  async getDtoById<D>(cls: ClassType<D>, id: number, extraOptions?: FindManyOptions<T>): Promise<D> {
     const object = await this.getAndCheckExistsById(id, extraOptions);
     return plainToInstance(cls, object);
   }
 
-  async getDtoBy<D>(
-    cls: ClassType<D>,
-    field: string,
-    value: any,
-    extraOptions?: FindManyOptions<T>,
-  ): Promise<D> {
+  async getDtoBy<D>(cls: ClassType<D>, field: string, value: any, extraOptions?: FindManyOptions<T>): Promise<D> {
     const object = await this.getAndCheckExistsBy(field, value, extraOptions);
     return plainToInstance(cls, object);
   }
 
-  async getAndCheckExistsById(
-    id: number,
-    extraOptions?: FindManyOptions<T>,
-  ): Promise<T> {
+  async getAndCheckExistsById(id: number, extraOptions?: FindManyOptions<T>): Promise<T> {
     const entity = await this.getById(id, extraOptions);
     this.throwNotFoundIfFalse(entity, id);
     return entity!;
   }
 
-  async getAndCheckExistsBy(
-    field: string,
-    value: any,
-    extraOptions?: FindManyOptions<T>,
-  ): Promise<T> {
+  async getAndCheckExistsBy(field: string, value: any, extraOptions?: FindManyOptions<T>): Promise<T> {
     const entity = await this.getBy(field, value, extraOptions);
     this.throwNotFoundIfFalse(entity, value);
     return entity!;
@@ -131,17 +115,17 @@ export class BaseService<T extends AppEntity> {
     return result;
   }
 
+  //Mutations-----------------------------------------------------------------
+
+  async updatePartial(id: number, fields: Partial<T>): Promise<UpdateResult> {
+    return this.rep.update(id, fields);
+  }
+
   private throwNotFoundIfFalse(value: any, fieldValue: any) {
-    if (!value)
-      throw new NotFoundException(
-        `${this.entityName} ${fieldValue} is not found`,
-      );
+    if (!value) throw new NotFoundException(`${this.entityName} ${fieldValue} is not found`);
   }
 
   private throwNotConflictIfTrue(value: any, fieldValue: any) {
-    if (value)
-      throw new ConflictException(
-        `${this.entityName} ${fieldValue} already exists`,
-      );
+    if (value) throw new ConflictException(`${this.entityName} ${fieldValue} already exists`);
   }
 }

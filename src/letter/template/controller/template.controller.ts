@@ -1,18 +1,9 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseInterceptors,
-  UploadedFile,
-  BadRequestException,
-  Get,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
-import { TemplateCreateRequest } from '../contract/request/template-create.request';
+import { Body, Controller, Post, UseInterceptors, UploadedFile, BadRequestException, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { TemplateCreateApprovalsRequest } from '../contract/request/template-set-approvals.request';
 import { TemplateService } from '../service/template.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TemplateDto } from '../../contract/dto/template.dto';
+import { TemplateCreateRequest } from '../contract/request/template-create.request';
 
 @Controller('letter/template')
 export class TemplateController {
@@ -22,10 +13,7 @@ export class TemplateController {
     FileInterceptor('file', {
       limits: { fileSize: 1024 * 1024 },
       fileFilter: (req, file, cb) => {
-        if (
-          file.mimetype === 'text/html' ||
-          file.originalname.endsWith('.html')
-        ) {
+        if (file.mimetype === 'text/html' || file.originalname.endsWith('.html')) {
           cb(null, true);
         } else {
           cb(new BadRequestException('Only HTML files are allowed!'), false);
@@ -34,11 +22,13 @@ export class TemplateController {
     }),
   )
   @Post()
-  createTemplate(
-    @Body() payload: TemplateCreateRequest,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<number> {
+  createTemplate(@Body() payload: TemplateCreateRequest, @UploadedFile() file: Express.Multer.File): Promise<number> {
     return this.service.create(payload, file);
+  }
+
+  @Post(':id/DepartmentRoleApprovals')
+  createDepartmentRoleApprovals(@Param('id', ParseIntPipe) id: number, @Body() payload: TemplateCreateApprovalsRequest): Promise<void> {
+    return this.service.createDepartmentRoleApprovals(id, payload);
   }
 
   @Get()

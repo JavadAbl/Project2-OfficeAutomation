@@ -10,7 +10,7 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @ManyToOne(() => DepartmentRole, (entity) => entity.users, { nullable: true })
+  @ManyToOne(() => DepartmentRole, { nullable: true })
   @JoinColumn({ name: 'departmentRoleId' })
   departmentRole: DepartmentRole | null;
 

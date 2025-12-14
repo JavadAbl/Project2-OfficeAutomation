@@ -1,6 +1,6 @@
-import { Entity, Column, ManyToMany } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from 'src/common/entity/base.entity';
-import { Workflow } from 'src/workflow/entity/workflow.entity';
+import { DepartmentRole } from 'src/identity/department/entity/department-role.entity';
 
 @Entity()
 export class Template extends BaseEntity {
@@ -10,6 +10,7 @@ export class Template extends BaseEntity {
   @Column()
   fileName: string;
 
-  @ManyToMany(() => Workflow, (en) => en.templates)
-  workflows: Workflow[];
+  @ManyToMany(() => DepartmentRole)
+  @JoinTable({ name: 'template_approvals' })
+  approvalDepartmentRoles: DepartmentRole[];
 }

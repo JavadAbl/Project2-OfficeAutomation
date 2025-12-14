@@ -1,12 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { BaseService } from 'src/common/service/base.service';
 import { Template } from '../entity/template.entity';
+import { TemplateCreateApprovalsRequest } from '../contract/request/template-set-approvals.request';
 import { TemplateCreateRequest } from '../contract/request/template-create.request';
+import { DepartmentRoleService } from 'src/identity/department/service/department-role.service';
+import { DepartmentRole } from 'src/identity/department/entity/department-role.entity';
 
 @Injectable()
 export class TemplateService extends BaseService<Template> {
@@ -14,15 +17,12 @@ export class TemplateService extends BaseService<Template> {
     @InjectRepository(Template)
     rep: Repository<Template>,
 
-    @InjectEntityManager() private em: EntityManager,
+    private readonly departmentRoleService: DepartmentRoleService,
   ) {
-    super(rep, 'Template');
+    super(rep, Template.name);
   }
 
-  async create(
-    payload: TemplateCreateRequest,
-    file: Express.Multer.File,
-  ): Promise<number> {
+  async create(payload: TemplateCreateRequest, file: Express.Multer.File): Promise<number> {
     if (!file) throw new BadRequestException('Invalid file');
 
     await this.checkConflictBy('name', payload.name);
@@ -39,8 +39,22 @@ export class TemplateService extends BaseService<Template> {
     return templateEntity.id;
   }
 
-  /*   async getDto(): Promise<TemplateDto[]> {
-    const templates = await this.rep.find();
-    return templates.map((template) => plainToInstance(TemplateDto, template));
-  } */
+  async createDepartmentRoleApprovals(templateId: number, payload: TemplateCreateApprovalsRequest): Promise<void> {
+    const { departmentRoleIds } = payload;
+
+    const template = await this.getAndCheckExistsById(templateId);
+    const drsList: DepartmentRole[] = [];
+
+    for (const dri of departmentRoleIds) {
+      try {
+        const drs = await this.departmentRoleService.getAndCheckExistsById(dri);
+        drsList.push(drs);
+      } catch (error) {
+        console.error(error.message, error);
+      }
+    }
+    console.log(template);
+    template.approvalDepartmentRoles = drsList;
+    await this.rep.save(template);
+  }
 }

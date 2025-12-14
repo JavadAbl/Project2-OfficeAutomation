@@ -25,7 +25,7 @@ export class Letter extends BaseEntity {
   @Column({ default: LetterPriority.Normal, enum: LetterPriority })
   priority: LetterPriority;
 
-  @ManyToOne(() => User, (user) => user.createdLetters, { nullable: false })
+  @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: 'creatorUserId' })
   creatorUser: User;
 

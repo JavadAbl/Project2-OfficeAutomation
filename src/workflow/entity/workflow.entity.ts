@@ -8,11 +8,11 @@ export class Workflow extends BaseEntity {
   @Column()
   name: string;
 
-  @ManyToMany(() => Template, (en) => en.workflows)
+  @ManyToMany(() => Template, { nullable: false })
   @JoinTable()
   templates: Template[];
 
-  @ManyToMany(() => DepartmentRole, (en) => en.workflows)
+  @ManyToMany(() => DepartmentRole, { nullable: false })
   @JoinTable()
   departmentRoles: DepartmentRole[];
 }

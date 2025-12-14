@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Letter } from '../entity/letter.entity';
 import { Repository } from 'typeorm';
@@ -12,6 +12,8 @@ import { Attachment } from '../entity/attachment.entity';
 import { LetterCreateRequest } from '../contract/request/letter-create.request';
 import { TemplateService } from '../template/service/template.service';
 import { AccessTokenPayload } from 'src/auth/contract/interface/access-token-payload.interface';
+import { RecipientService } from '../recipient/service/recipient.service';
+import { LetterStatus } from '../contract/enum/letter-status.enum';
 
 @Injectable()
 export class LetterService extends BaseService<Letter> {
@@ -25,6 +27,9 @@ export class LetterService extends BaseService<Letter> {
     private readonly repAttachment: Repository<Attachment>,
 
     private readonly templateService: TemplateService,
+
+    @Inject(forwardRef(() => RecipientService))
+    private readonly recipientService: RecipientService,
   ) {
     super(rep, Letter.name);
   }
@@ -70,5 +75,30 @@ export class LetterService extends BaseService<Letter> {
     );
 
     await this.repAttachment.save(attachments);
+  }
+
+  async getLetterById(id: number, tokenPayload: AccessTokenPayload): Promise<letterDto> {
+    const { userId } = tokenPayload;
+
+    const letter = await this.getAndCheckExistsById(id);
+    if (letter.creatorUserId === userId) return plainToInstance(letterDto, letter);
+    if (letter.status !== LetterStatus.sent) throw new ForbiddenException('Access this letter is not permit');
+
+    const recipient = await this.recipientService.getBy('letterId', id, {
+      where: [
+        // (letterId = :letterId AND receiverId = :receiverId)
+        { letterId: id, receiverId: userId },
+        // OR (letterId = :letterId AND senderId = :senderId)
+        { letterId: id, senderId: userId },
+      ],
+    });
+
+    if (!recipient) throw new ForbiddenException('Access this letter is not permit');
+    if (!recipient.IsSeen) {
+      const temp = await this.recipientService.updatePartial(recipient.id, { IsSeen: true });
+      console.log(temp);
+    }
+
+    return plainToInstance(letterDto, letter);
   }
 }
