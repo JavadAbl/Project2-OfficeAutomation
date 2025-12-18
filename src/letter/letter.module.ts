@@ -1,22 +1,24 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { LetterController } from './controller/letter.controller';
-import { LetterService } from './service/letter.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Letter } from './entity/letter.entity';
-import { Attachment } from './entity/attachment.entity';
-import { Recipient } from './recipient/entity/recipient.entity';
-import { Template } from './template/entity/template.entity';
-import { TemplateController } from './template/controller/template.controller';
-import { LetterApproval } from './entity/letter-approval.entity';
+import { Template } from './template/_template/entity/template.entity';
+import { TemplateController } from './template/_template/controller/template.controller';
 import { TemplateModule } from './template/template.module';
 import { RecipientModule } from './recipient/recipient.module';
-import { LetterApprovalService } from './service/letter-approval.service';
+import { LetterActionModule } from './letter-action/letter-action.module';
+import { LetterController } from './_letter/controller/letter.controller';
+import { Attachment } from './_letter/entity/attachment.entity';
+import { LetterApproval } from './_letter/entity/letter-approval.entity';
+import { Letter } from './_letter/entity/letter.entity';
+import { LetterApprovalService } from './_letter/service/letter-approval.service';
+import { LetterService } from './_letter/service/letter.service';
+import { Recipient } from './recipient/_recipient/entity/recipient.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Letter, LetterApproval, Attachment, Recipient, Template]),
     TemplateModule,
     forwardRef(() => RecipientModule),
+    LetterActionModule,
   ],
   controllers: [LetterController, TemplateController],
   providers: [LetterService, LetterApprovalService],

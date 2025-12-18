@@ -1,15 +1,15 @@
 import { DataSource } from 'typeorm';
-import { Department } from './identity/department/entity/department.entity';
-import { DepartmentRole } from './identity/department/entity/department-role.entity';
-import { User } from './identity/user/entity/user.entity';
-import { BCryptProvider } from './auth/providers/bcrypt.provider';
-import { AuthRole } from './auth/enum/auth-role.enum';
-import { Workflow } from './workflow/entity/workflow.entity';
-import { Recipient } from './letter/recipient/entity/recipient.entity';
-import { Letter } from './letter/entity/letter.entity';
-import { Template } from './letter/template/entity/template.entity';
-import { Attachment } from './letter/entity/attachment.entity';
-import { LetterApproval } from './letter/entity/letter-approval.entity';
+import { Department } from './identity/department/_department/entity/department.entity';
+import { DepartmentRole } from './identity/department/_department/entity/department-role.entity';
+import { User } from './identity/user/_user/entity/user.entity';
+import { BCryptProvider } from './auth/_auth/providers/bcrypt.provider';
+import { AuthRole } from './auth/_auth/enum/auth-role.enum';
+import { Workflow } from './workflow/_workflow/entity/workflow.entity';
+import { Recipient } from './letter/recipient/_recipient/entity/recipient.entity';
+import { Letter } from './letter/_letter/entity/letter.entity';
+import { Template } from './letter/template/_template/entity/template.entity';
+import { Attachment } from './letter/_letter/entity/attachment.entity';
+import { LetterApproval } from './letter/_letter/entity/letter-approval.entity';
 
 // 1. Configure your database connection
 // IMPORTANT: Replace these values with your actual database credentials.
@@ -18,17 +18,7 @@ const AppDataSource = new DataSource({
 
   database: 'app.db',
   // Make sure to list all your entities here
-  entities: [
-    Department,
-    DepartmentRole,
-    User,
-    Letter,
-    Recipient,
-    Workflow,
-    Template,
-    Attachment,
-    LetterApproval,
-  ],
+  entities: [Department, DepartmentRole, User, Letter, Recipient, Workflow, Template, Attachment, LetterApproval],
   synchronize: true, // Keep this false for seeding scripts
   logging: true,
 });

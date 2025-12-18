@@ -1,8 +1,8 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { AuthController } from './ controller/auth.controller';
-import { AuthService } from './service/auth.service';
-import { HashingProvider } from './providers/hashing.provider';
-import { BCryptProvider } from './providers/bcrypt.provider';
+import { AuthController } from './_auth/ controller/auth.controller';
+import { AuthService } from './_auth/service/auth.service';
+import { HashingProvider } from './_auth/providers/hashing.provider';
+import { BCryptProvider } from './_auth/providers/bcrypt.provider';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ConfigType } from 'src/config/config.type';
